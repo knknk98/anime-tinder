@@ -12,7 +12,7 @@
 
 ## ディレクトリ構成
 ```
-twikeshi
+anime-tinder
 ├── README.md
 ├── docker-compose.yml
 ├── api-document.yaml ... API仕様書
