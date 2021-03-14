@@ -19,29 +19,33 @@ paths:
         - user
       summary: ログインAPI
       description:
-        「Twitterログイン」ボタンの処理。
+        <b>「Twitterでログイン」ボタンをおした時の処理</b><br>
+        サーバーがOAuth認証をする。成功した場合、返り値はなく、TwitterAPIの方で設定したcallback URLにリダイレクトされる。
       responses:
         200:
           description: A sucessful response.
-          
+
   /user/logout:
     get:
       tags:
         - user
       summary: ログアウトAPI
       description:
-        「Twitterログイン」ボタンの処理。
+        <b>「ログアウト」ボタンを押したときの処理</b><br>
+        ログインAPIと同様。成功した場合、user/login/にリダイレクトさせるがこの処理はクライアント側で実装する。
       responses:
         200:
           description: A sucessful response.
-          
+
   /user/callback:
     get:
       tags:
         - user
       summary: セッション保持API
       description:
-        ログイン時にセッションを保持。
+        <b>ログイン時にセッションを保持</b><br>
+        ログイン状態を確認して、ログインしていればユーザ―情報を取得する。サーバーサイドでsessionIDを発行して、これをクライアントに渡す。<br>
+        sessionIDに加え、（アプリページに表示するため）Twitterアイコン、Twitterアカウント名も取得。
       responses:
         200:
           description: A sucessful response.
@@ -53,6 +57,10 @@ paths:
                   sessionId:
                     type: "string"
                     example: "hogefuga"
+                  username:
+                    type: "string"
+                  profile_image_url:
+                    type: "string"
 
   /app/recs:
     get:
@@ -60,7 +68,9 @@ paths:
         - app
       summary: アニメ情報取得API
       description:
-        指定した数だけカードに表示するアニメの情報を取ってくる。
+        指定した数(num)だけカードに表示するアニメの情報を取ってくる。<br>
+        DBにアクセスし、過去に表示したカード以外から適当に選んでくる。
+
       parameters:
         - name: num
           in: query
@@ -68,6 +78,12 @@ paths:
           required: true
           schema:
             type: integer
+        - name: sessionID
+          in: header
+          description: セッションID
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: A successful response.
@@ -75,12 +91,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AnimeGetResponse"
+  /app/rslts:
     post:
       tags:
         - app
-      summary: LIKE情報更新API
+      summary: オススメアニメ取得API
       description:
-        LIKE/NOPE/SUPERLIKEの情報を渡す。
+        LIKE/NOPE/SUPERLIKEの情報を渡すとオススメアニメの情報が返ってくる。<br>
+        DBにアクセスし、過去のLIKE/NOPE/SUPERLIKE情報と今回の情報をもとにオススメアニメを1つ返す。
+      parameters:
+        - name: sessionID
+          in: header
+          description: セッションID
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Request Body
         content:
@@ -91,7 +116,10 @@ paths:
       responses:
         200:
           description: A successful response.
-          content: {}
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnimeGetResponse"
 
 components:
   schemas:
@@ -146,4 +174,5 @@ components:
         like:
           type: integer
           description: 0:NOPE,1:LIKE,2:SUPERLIKE
+
 
