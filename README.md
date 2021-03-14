@@ -46,3 +46,5 @@ http://localhost:3000 にページが表示される
 swaggerを用いた。yaml形式で記述されている。
 
 `api-document.yaml`をhttps://editor.swagger.io/ などで開く。
+
+サーバに接続した状態で各APIの"Try it out"を押してパラメータやらリクエストの値やらを入力し"Execute"するとちゃんとAPIが動作してるかチェックできる。
