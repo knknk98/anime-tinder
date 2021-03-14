@@ -61,6 +61,33 @@ paths:
                     type: "string"
                   profile_image_url:
                     type: "string"
+  /user/recent:
+    get:
+      tags:
+        - user
+      summary: 最近の診断結果取得
+      description:
+        指定した数(num)だけその人の最近の診断結果(アニメ画像)を取ってくる
+      parameters:
+        - name: num
+          in: query
+          description: 表示数
+          required: true
+          schema:
+            type: integer
+        - name: sessionID
+          in: header
+          description: セッションID
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecentResults"
 
   /app/recs:
     get:
@@ -123,6 +150,14 @@ paths:
 
 components:
   schemas:
+    RecentResults:
+      type: object
+      properties:
+        animeImages:
+          type: array
+          items:
+            type: "string"
+            description: 各アニメ画像
     AnimeGetResponse:
       type: object
       properties:
