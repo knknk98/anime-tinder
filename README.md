@@ -45,4 +45,4 @@ http://localhost:3000 にページが表示される
 ## API仕様書
 swaggerを用いた。yaml形式で記述されている。
 
-`api-document.yaml`を`https://editor.swagger.io/`などで開く。
+`api-document.yaml`をhttps://editor.swagger.io/ などで開く。
