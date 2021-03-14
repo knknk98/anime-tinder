@@ -1,0 +1,149 @@
+openapi: "3.0.2"
+info:
+  title: Anime Tinder
+  description: サポーターズハッカソン用アニメレコメンドアプリのAPI仕様
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/
+
+tags:
+  - name: user
+    description: ユーザ関連API
+  - name: app
+    description: アプリ本体関連API
+
+paths:
+  /user/login:
+    get:
+      tags:
+        - user
+      summary: ログインAPI
+      description:
+        「Twitterログイン」ボタンの処理。
+      responses:
+        200:
+          description: A sucessful response.
+          
+  /user/logout:
+    get:
+      tags:
+        - user
+      summary: ログアウトAPI
+      description:
+        「Twitterログイン」ボタンの処理。
+      responses:
+        200:
+          description: A sucessful response.
+          
+  /user/callback:
+    get:
+      tags:
+        - user
+      summary: セッション保持API
+      description:
+        ログイン時にセッションを保持。
+      responses:
+        200:
+          description: A sucessful response.
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  sessionId:
+                    type: "string"
+                    example: "hogefuga"
+
+  /app/recs:
+    get:
+      tags:
+        - app
+      summary: アニメ情報取得API
+      description:
+        指定した数だけカードに表示するアニメの情報を取ってくる。
+      parameters:
+        - name: num
+          in: query
+          description: 表示数
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnimeGetResponse"
+    post:
+      tags:
+        - app
+      summary: LIKE情報更新API
+      description:
+        LIKE/NOPE/SUPERLIKEの情報を渡す。
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnimeLikeRequest'
+        required: true
+      responses:
+        200:
+          description: A successful response.
+          content: {}
+
+components:
+  schemas:
+    AnimeGetResponse:
+      type: object
+      properties:
+        animes:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnimeInfo"
+          description: 各アニメ情報
+    AnimeLikeRequest:
+      type: object
+      properties:
+        animes:
+          type: array
+          items:
+            $ref: "#/components/schemas/LikeInfo"
+          description: LIKE/NOPE/SUPERLIKE情報
+    AnimeInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: アニメid
+        title:
+          type: string
+          description: アニメタイトル
+        image:
+          type: string
+          description: アニメ画像
+        description:
+          type: string
+          description: 概要
+        year:
+          type: string
+          description: 放送時期(ex.2020年春)
+        genre:
+          type: array
+          items:
+            type: string
+            description: ジャンル
+        company:
+          type: string
+          description: 制作会社
+    LikeInfo:
+      type: object
+      properties:
+        animeId:
+          type: string
+          description: アニメid
+        like:
+          type: integer
+          description: 0:NOPE,1:LIKE,2:SUPERLIKE
+
