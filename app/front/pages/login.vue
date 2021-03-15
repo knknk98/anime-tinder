@@ -1,12 +1,15 @@
 <template>
   <div id="container">
-    <div id="login-gridA" class="box">
-      <h1>ここにタイトルを入れる。</h1>
-      <h2>オタクは急展開する。アニメひとつで。</h2>
-      <LoginButton/>
+    <div id="login-gridA">
+      <div class="block-box">
+        <h1>ここにタイトルを入れる。</h1>
+        <h2 class="catchcopy">オタクは急展開する。アニメひとつで。</h2>
+        <br><br>
+        <LoginButton/>
+      </div>
     </div>
-    <div id="login-gridB" class="horizontal-gradient box">B</div>
-    <div id="login-gridC" class="horizontal-gradient box">C</div>
+    <div id="login-gridB" class="horizontal-gradient"></div>
+    <div id="login-gridC" class="horizontal-gradient"></div>
   </div>
 </template>
 <script>

@@ -3,10 +3,8 @@
 #container {
     position : fixed;
     display: grid;
-    margin: 0px;
     grid-template-rows: 50vh 50vh;
     grid-template-columns: 55vw 45vw;
-    background: black;
 }
 
 /* アイテム */
@@ -21,10 +19,16 @@
 #login-gridB {
     grid-row: 1 / 2;
     grid-column: 2 / 3;
+    background-image: url("../image/gotobun.webp");
+    background-size:  cover;
+    background-position: center center;
 }
 #login-gridC {
     grid-row: 2 / 3;
     grid-column: 2 / 3;
+    background-image: url("../image/rezero.jpeg");
+    background-size:  cover;
+    background-position: center center;
 }
 
 .catchcopy{
