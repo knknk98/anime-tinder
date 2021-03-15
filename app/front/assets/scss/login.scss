@@ -1,5 +1,7 @@
+// TODO: グリッドレイアウトのdivタグのためか、どうしても上に余白ができてしまう。
 /* コンテナ */
 #container {
+    position : fixed;
     display: grid;
     grid-template-rows: 50vh 50vh;
     grid-template-columns: 55vw 45vw;
@@ -10,6 +12,9 @@
     grid-row: 1 / 3;
     grid-column: 1 / 2;
     background: white;
+    display: flex;
+    justify-items: center;
+    align-items: center;
 }
 #login-gridB {
     grid-row: 1 / 2;
@@ -24,4 +29,15 @@
     background-image: url("../image/rezero.jpeg");
     background-size:  cover;
     background-position: center center;
+}
+
+.catchcopy{
+    font-family: 'Hiragino Mincho ProN', 'Noto Serif JP', serif;
+    font-weight: 300;
+    font-style: italic; 
+}
+
+.block-box{
+    display: block;
+    text-align: center;
 }
