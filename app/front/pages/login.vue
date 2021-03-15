@@ -8,12 +8,8 @@
         <LoginButton/>
       </div>
     </div>
-    <div id="login-gridB" class="horizontal-gradient">
-      B
-    </div>
-    <div id="login-gridC" class="horizontal-gradient">
-      C
-    </div>
+    <div id="login-gridB" class="horizontal-gradient"></div>
+    <div id="login-gridC" class="horizontal-gradient"></div>
   </div>
 </template>
 <script>
