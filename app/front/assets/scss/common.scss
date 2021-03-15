@@ -1,3 +1,13 @@
 .button-right{
     margin: 0 0 0 auto;
 }
+
+.horizontal-gradient {
+    background: linear-gradient(to right, $main-pink, $main-orange);
+    color: white;
+}
+
+.box {
+    width: 100vw;
+    height: 100vh;
+}
