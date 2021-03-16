@@ -146,24 +146,27 @@ def create_app():
                     db.session.commit()
 
                 # セッション変数の設定
+                session['session_id'] = uuid.uuid4()
                 session['user_name'] = user_data['name']
                 session['user_id'] = access_token['user_id']
                 session['oauth_token'] = access_token['oauth_token']
                 session['oauth_token_secret'] = access_token['oauth_token_secret']
 
-                # https://syncer.jp/Web/API/Twitter/Snippet/4/
+                # アイコン画像URLから_normalを取り除きオリジナルサイズのものを得ている. https://syncer.jp/Web/API/Twitter/Snippet/4/
                 image_url = re.sub(r'_normal', '', user_data['profile_image_url_https'])
-                response_data = {'sessionId': session['user_id'], 'username': session['user_name'], 'profile_image_url': image_url}
+                # 返すデータを整えてjsonでreturn
+                response_data = {'sessionId': session['session_id'], 'username': session['user_name'], 'profile_image_url': image_url}
                 return jsonify(response_data)
             else:
-                raise Exception('response status code is not 200')
+                raise Exception(f'response status code is not 200 (is {response.status_code})')
         except Exception as e:
             print(e)
             return '''login failed. <a href="http://localhost:3000>top</a>'''
 
-    @app.route('/logout')
+    @app.route('/user/logout')
     def logout():
         # セッション変数の削除
+        session.pop('session_id', None)
         session.pop('user_name', None)
         session.pop('user_id', None)
         session.pop('oauth_token', None)
@@ -171,12 +174,13 @@ def create_app():
         #return redirect(url_for('login_test'))
         return 'logout'
 
-    @app.route('/user_delete')
+    @app.route('/user/user_delete')
     def logout_and_delete():
         # データベースからユーザー情報を削除
         db.session.query(User).filter(User.id==session['user_id']).delete()
         db.session.commit()
         # セッション変数の削除
+        session.pop('session_id', None)
         session.pop('user_name', None)
         session.pop('user_id', None)
         session.pop('oauth_token', None)
