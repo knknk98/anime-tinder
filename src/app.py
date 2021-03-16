@@ -138,7 +138,7 @@ def create_app():
 
             if response.status_code == 200:
                 user_data = json.loads(response.text)
-                users = User.query.filter(User.user_id==user_data['name']).all()
+                users = User.query.filter(User.user_id==access_token['user_id']).all()
                 if len(users) == 0:
                     # 存在しないなら登録処理
                     user = User(name=user_data['name'], user_id=access_token['user_id'])
