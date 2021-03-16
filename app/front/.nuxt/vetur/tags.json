@@ -1,5 +1,8 @@
 {
   "LoginButton": {
     "description": "Auto imported from components/LoginButton.vue"
+  },
+  "TheResultBox": {
+    "description": "Auto imported from components/TheResultBox.vue"
   }
 }
