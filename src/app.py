@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
+import json
 from src.database import init_db, db
 from src.models import User,LikeUnlike,AnimeData
 from requests_oauthlib import OAuth1Session
@@ -11,25 +12,13 @@ from urllib.parse import parse_qsl
 # https://qiita.com/voygerrr/items/4c78d156fc91111798d5
 
 def create_app():
+
     app = Flask(__name__)
     app.config.from_object('src.config.Config') # configを別ファイルのオブジェクトから読み込む
 
     #login_manager = LoginManager()
     #login_manager.init_app(app)
     app.secret_key = b'\x17x\xf0\x83\x93i\x14\xa3\xec<7\x88A\xca\xb5G'
-
-    '''
-    class User(UserMixin):
-        def __init__(self, id, name, password):
-            self.id = id
-            self.name = name
-            self.password = password
-    # ログイン用ユーザー作成
-    users = {
-        1: User(1, "user01", "password"),
-        2: User(2, "user02", "password")
-    }
-    '''
 
     init_db(app) # databaseの初期化を行う
 
@@ -40,7 +29,7 @@ def create_app():
             name = session['name']
             return f'hello {name}'
         else:
-            return redirect(url_for('login'))
+            return redirect(url_for('login_test'))
 
     @app.route('/show')
     def show_users():
@@ -102,35 +91,28 @@ def create_app():
                     </form>
                     '''
 
-    @app.route('/user/login')
-    def login():
+    # 認証画面を返す
+    @app.route('/user/login', methods=['GET'])
+    def get_twitter_request_token():
+        # twitter api key
+        consumer_api_key = 'qOoxU6YUCvtlTu59IkrSMwrs7'
+        consumer_secret_key = 'QAzP9tbdfUof711fcD7GhiMXJPO5aE3p7GPnVEoZye96pX3XDP'
+        # Twitter api URLs
+        request_token_url = 'https://api.twitter.com/oauth/request_token'
+        authorization_url = 'https://api.twitter.com/oauth/authorize'
+        access_token_url = 'https://api.twitter.com/oauth/access_token'
+
         try:
-            consumer_api_key = '2CjZeF9ds74xmakxasgSjjJih'
-            consumer_secret_key = 'lIdTXrJiEpbkAY1RVXHlbHFosZ95LQ6XFK3KcROMCd1qriug53'
+            # リクエストトークンを取得し, 認証urlを取得してリダイレクトする. 失敗したらトップページへのリンクを提示する.
             oauth_callback = "http://127.0.0.1:3000/callback"
-            #TwitterAPI連携のための各種URL
-            request_token_url = 'https://api.twitter.com/oauth/request_token'
-            authorization_url = 'https://api.twitter.com/oauth/authorize'
-            access_token_url = 'https://api.twitter.com/oauth/access_token'
-
-            # get access token using OAuth
-            #redirect_response = request.url
             twitter = OAuth1Session(consumer_api_key, consumer_secret_key)
-            #twitter.parse_authorization_response(redirect_response)
-            #response = twitter.fetch_access_token(access_token_url)
-            response = twitter.post(request_token_url, params={'oauth_callback': oauth_callback})
-            request_token = dict(parse_qsl(response.content.decode("utf-8")))
-            authenticate_endpoint = '%s?oauth_token=%s' % (authenticate_url, request_token['oauth_token'])
-            request_token.update({'authenticate_endpoint': authenticate_endpoint})
-            return request_token['authenticate_endpoint']
+            twitter.fetch_request_token(request_token_url)
+            auth_url = twitter.authorization_url(authorization_url)
+            return redirect(auth_url, code=200)
 
-            # fetch access token
-            access_token = response.get('oauth_token')
-            access_token_secret = response.get('oauth_token_secret')
-
-            return 'login success'
-        except:
-            return 'login failed'
+        except Exception as e:
+            print(e)
+            return '''login failed. <a href="http://localhost:3000>top</a>'''
 
     @app.route('/user/callback')
     def callback():
@@ -140,7 +122,7 @@ def create_app():
     def logout():
         # セッション変数の削除
         session.pop('name', None)
-        return redirect(url_for('login'))
+        return redirect(url_for('login_test'))
 
     return app
 
