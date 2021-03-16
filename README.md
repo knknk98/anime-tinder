@@ -15,23 +15,30 @@
 anime-tinder
 ├── README.md
 ├── docker-compose.yml
+├── Dockerfile ... python用のDockerfile
 ├── api-document.yaml ... API仕様書
-└── app ... フロントエンド
-    ├── Dockerfile
-    └── front ... Nuxtのプロジェクト
-        ├── assets
-        ├── components
-        ├── layouts
-        ├── middleware
-        ├── node_modules
-        ├── nuxt.config.js
-        ├── package.json
-        ├── pages
-        ├── plugins
-        ├── README.md
-        ├── static
-        ├── store
-        └── yarn.lock
+├── app ... フロントエンド
+│   ├── Dockerfile
+│   └── front ... Nuxtのプロジェクト
+│       ├── assets
+│       ├── components
+│       ├── layouts
+│       ├── middleware
+│       ├── node_modules
+│       ├── nuxt.config.js
+│       ├── package.json
+│       ├── pages
+│       ├── plugins
+│       ├── README.md
+│       ├── static
+│       ├── store
+│       └── yarn.lock
+├── mysql ... データベース
+│    ├── Dockerfile
+│    ├── my.cnf
+│    └── sqls
+│        └── initialize.sql ... 初回起動時実行されるSQL
+└── src ... pythonのコード
 ```
 
 ## フロントエンド(Nuxt)
@@ -41,6 +48,10 @@ anime-tinder
 http://localhost:3000 にページが表示される
 
 `Ctrl+C`で終了
+
+## バックエンド（flask）
+### 実行
+`docker-compose up -d` でバックグラウンド実行. `flask run -h 0.0.0.0`が実行される（`0.0.0.0`で外部からの受付、実行ファイルは`Dockerfile`で指定している）. http://localhost:5000 でバックエンドに接続できる.
 
 ## API仕様書
 swaggerを用いた。yaml形式で記述されている。
