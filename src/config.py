@@ -7,7 +7,7 @@ class DevelopmentConfig:
         'user': 'root',
         #'password': os.getenv('DB_PASSWORD', 'root'),
         'password': 'root',
-        # docker network で該当のものを探し, docker network inspect [entrypoint] で出てくる表示のContainersのNameがdbっぽいもののIPv4Addressを記述する.
+        # docker network で該当のものを探し, docker network inspect [entrypoint] で出てくる表示のContainersのNameがdbっぽいもののIPv4Addressを記述する. 現在はdocker-composeのnetwork設定により固定化している.
         #'host': os.getenv('DB_HOST', '172.26.0.2'),
         'host': '172.30.0.2',
         #'database': os.getenv('DB_DATABASE', 'anime_recommender')
