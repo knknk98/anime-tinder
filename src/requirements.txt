@@ -1,0 +1,11 @@
+flask
+sqlalchemy
+flask-sqlalchemy
+sqlalchemy_utils
+flask-migrate
+flask-login
+pymysql
+gunicorn
+flask_marshmallow
+marshmallow-sqlalchemy
+requests_oauthlib

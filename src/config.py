@@ -1,0 +1,19 @@
+import os
+'''flaskのappのconfig設定オブジェクトを書く'''
+
+class DevelopmentConfig:
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{user}:{password}@{host}/{database}?charset=utf8mb4'.format(**{
+        #'user': os.getenv('DB_USER', 'root'),
+        'user': 'root',
+        #'password': os.getenv('DB_PASSWORD', 'root'),
+        'password': 'root',
+        # docker network で該当のものを探し, docker network inspect [entrypoint] で出てくる表示のContainersのNameがdbっぽいもののIPv4Addressを記述する.
+        #'host': os.getenv('DB_HOST', '172.26.0.2'),
+        'host': '172.30.0.2',
+        #'database': os.getenv('DB_DATABASE', 'anime_recommender')
+        'database': 'anime_recommender'
+    })
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ECHO = False
+
+Config = DevelopmentConfig
