@@ -1,6 +1,7 @@
 import Vue from 'vue'
 
 const components = {
+  NavBar: () => import('../../components/NavBar.vue' /* webpackChunkName: "components/nav-bar" */).then(c => c.default || c)
 }
 
 for (const name in components) {

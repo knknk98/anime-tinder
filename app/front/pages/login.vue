@@ -5,6 +5,8 @@
 </template>
 <script>
 export default {
-  // middleware: 'authenticated',
+  components: {
+    LoginButton,
+  }
 }
 </script>

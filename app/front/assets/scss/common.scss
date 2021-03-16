@@ -1,3 +1,14 @@
 .button-right{
     margin: 0 0 0 auto;
 }
+
+.horizontal-gradient {
+    background: linear-gradient(to right, $main-orange, $main-pink);
+    color: white;
+}
+
+// 全画面
+.box {
+    width: 100vw;
+    height: 100vh;
+}
