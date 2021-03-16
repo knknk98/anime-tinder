@@ -1,7 +1,7 @@
 <template>
-  <v-app>
-    <NavSideBar/>
+  <v-app >
     <v-main>
+      <NavSideBar/>
       <v-container>
         <nuxt />
       </v-container>
