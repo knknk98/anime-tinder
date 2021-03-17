@@ -159,7 +159,7 @@ def create_app():
                 image_url = re.sub(r'_normal', '', user_data['profile_image_url_https'])
                 # 返すデータを整えてjsonでreturn
                 response_data = {'sessionId': session['session_id'], 'username': session['user_name'], 'profile_image_url': image_url}
-                print(session)
+                #print(session)
                 return jsonify(response_data)
             else:
                 raise Exception(f'response status code is not 200 (is {response.status_code})')
