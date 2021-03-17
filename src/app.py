@@ -7,6 +7,7 @@ from src.database import init_db, db
 from src.models import User,LikeUnlike,AnimeData
 from requests_oauthlib import OAuth1Session
 from urllib.parse import parse_qsl
+from flask_cors import CORS
 
 # https://qiita.com/AndanteSysDes/items/a25acc1523fa674e7eda
 # https://qiita.com/shirakiya/items/0114d51e9c189658002e
@@ -24,6 +25,7 @@ def create_app():
 
     app = Flask(__name__)
     app.config.from_object('src.config.Config') # configを別ファイルのオブジェクトから読み込む
+    CORS(app)
 
     #login_manager = LoginManager()
     #login_manager.init_app(app)
