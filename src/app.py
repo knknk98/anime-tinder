@@ -152,8 +152,8 @@ def create_app():
                 session['session_id'] = str(uuid.uuid4())
                 session['user_name'] = access_token['screen_name']
                 session['user_id'] = access_token['user_id']
-                #session['oauth_token'] = access_token['oauth_token']
-                #session['oauth_token_secret'] = access_token['oauth_token_secret']
+                # session['oauth_token'] = access_token['oauth_token']
+                # session['oauth_token_secret'] = access_token['oauth_token_secret']
 
                 # アイコン画像URLから_normalを取り除きオリジナルサイズのものを得ている. https://syncer.jp/Web/API/Twitter/Snippet/4/
                 image_url = re.sub(r'_normal', '', user_data['profile_image_url_https'])

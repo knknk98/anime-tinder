@@ -13,7 +13,6 @@ export default {
       params: this.$route.query,
     }).then(res => {
       // set session
-      console.log(res.data);
       this.$store.commit('setAuthUser', res.data.sessionId);
       this.$store.commit('setUserName', res.data.username);
       this.$store.commit('setUserImage', res.data.profile_image_url);
