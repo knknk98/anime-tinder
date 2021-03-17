@@ -18,7 +18,7 @@ export default {
       this.$store.commit('setUserName', res.data.username);
       this.$store.commit('setUserImage', res.data.profile_image_url);
 
-      // this.$router.push('/');
+      this.$router.push('/');
     }).catch(err => {
     });
   },

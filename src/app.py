@@ -117,11 +117,12 @@ def create_app():
             twitter = OAuth1Session(consumer_api_key, consumer_secret_key)
             twitter.fetch_request_token(request_token_url)
             auth_url = twitter.authorization_url(authorization_url)
-            return redirect(auth_url, code=200)
+            return redirect(auth_url)
 
         except Exception as e:
             print(e)
-            return '''login failed. <a href="http://localhost:3000>top</a>'''
+            #return '''login failed. <a href="http://localhost:3000>top</a>'''
+            return f'{e}'
 
     @app.route('/user/callback', methods=['GET'])
     def callback():
@@ -143,27 +144,29 @@ def create_app():
                 users = User.query.filter(User.user_id==access_token['user_id']).all()
                 if len(users) == 0:
                     # 存在しないなら登録処理
-                    user = User(name=user_data['name'], user_id=access_token['user_id'])
+                    user = User(name=user_data['screen_name'], user_id=access_token['user_id'])
                     db.session.add(user)
                     db.session.commit()
 
                 # セッション変数の設定
-                session['session_id'] = uuid.uuid4()
-                session['user_name'] = user_data['name']
+                session['session_id'] = str(uuid.uuid4())
+                session['user_name'] = access_token['screen_name']
                 session['user_id'] = access_token['user_id']
-                session['oauth_token'] = access_token['oauth_token']
-                session['oauth_token_secret'] = access_token['oauth_token_secret']
+                #session['oauth_token'] = access_token['oauth_token']
+                #session['oauth_token_secret'] = access_token['oauth_token_secret']
 
                 # アイコン画像URLから_normalを取り除きオリジナルサイズのものを得ている. https://syncer.jp/Web/API/Twitter/Snippet/4/
                 image_url = re.sub(r'_normal', '', user_data['profile_image_url_https'])
                 # 返すデータを整えてjsonでreturn
                 response_data = {'sessionId': session['session_id'], 'username': session['user_name'], 'profile_image_url': image_url}
+                print(session)
                 return jsonify(response_data)
             else:
                 raise Exception(f'response status code is not 200 (is {response.status_code})')
         except Exception as e:
             print(e)
-            return '''login failed. <a href="http://localhost:3000>top</a>'''
+            #return '''login failed. <a href="http://localhost:3000>top</a>'''
+            return f'{e}'
 
     @app.route('/user/logout')
     def logout():
