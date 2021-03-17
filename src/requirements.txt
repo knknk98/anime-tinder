@@ -1,5 +1,5 @@
 flask
-sqlalchemy
+sqlalchemy<1.4
 flask-sqlalchemy
 sqlalchemy_utils
 flask-migrate
