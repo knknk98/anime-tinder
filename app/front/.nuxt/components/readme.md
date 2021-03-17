@@ -7,4 +7,5 @@ You can directly use them in pages and other components without the need to impo
 **Tip:** If a component is conditionally rendered with `v-if` and is big, it is better to use `Lazy` or `lazy-` prefix to lazy load.
 
 - `<LoginButton>` | `<login-button>` (components/LoginButton.vue)
-- `<TheResultBox>` | `<the-result-box>` (components/TheResultBox.vue)
+- `<TheResultAnimeInfo>` | `<the-result-anime-info>` (components/TheResultAnimeInfo.vue)
+- `<TheResultTextBox>` | `<the-result-text-box>` (components/TheResultTextBox.vue)

@@ -1,15 +1,19 @@
 <template>
     <div>
-        <TheResultBox/>
+        <TheResultTextBox/>
+        <TheResultAnimeInfo/>
+        <v-card>もう1回診断する</v-card>
     </div>
 </template>
 
 <script>
-import TheResultBox from '~/components/TheResultBox.vue'
+import TheResultTextBox from '~/components/TheResultTextBox.vue'
+import TheResultAnimeInfo from '~/components/TheResultAnimeInfo.vue'
 export default {
   // middleware: 'authenticated',
   components: {
-      TheResultBox,
+      TheResultTextBox,
+      TheResultAnimeInfo,
   }
 }
 </script>
