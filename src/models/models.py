@@ -5,6 +5,7 @@ from src.database import db
 
 class User(db.Model):
     __tablename__ = 'users'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True, unique=True)
     name = db.Column(db.Unicode(255), nullable=False)
@@ -19,12 +20,19 @@ class User(db.Model):
 
 class AnimeData(db.Model):
     __tablename__ = 'anime_data'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True, unique=True)
-    name = db.Column(db.Unicode(255), nullable=False)
+    title = db.Column(db.Unicode(255), nullable=False)
+    image = db.Column(db.LargeBinary)
+    description = db.Column(db.Text, nullable=False)
+    year = db.Column(db.Unicode(127), nullable=False)
+    genre = db.Column(db.Unicode(127), nullable=False)
+    company = db.Column(db.Unicode(255), nullable=False)
 
 class LikeUnlike(db.Model):
     __tablename__ = 'likeunlike'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True, unique=True)
     user_id = db.Column(db.Integer, nullable=False)
