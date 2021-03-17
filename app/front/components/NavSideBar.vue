@@ -32,11 +32,6 @@
             :img="item.imageUrl"
             height="250"
           >
-            <v-card-title>
-              <h3>
-                {{ item.title }}
-              </h3>
-            </v-card-title>
           </v-card>
         </v-list-item-content>
       </v-list-item>
