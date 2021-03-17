@@ -131,4 +131,5 @@ dmypy.json
 node_modules
 .DS_Store
 .env
-.nuxt
+mysql/mysql_data/
+.nuxt/
