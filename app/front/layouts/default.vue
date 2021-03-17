@@ -1,6 +1,7 @@
 <template>
-  <v-app>
+  <v-app >
     <v-main>
+      <NavSideBar/>
       <v-container>
         <nuxt />
       </v-container>
@@ -9,6 +10,10 @@
 </template>
 
 <script>
+import NavSideBar from '~/components/NavSideBar.vue'
 export default {
+  components: {
+    NavSideBar,
+  }
 }
 </script>
