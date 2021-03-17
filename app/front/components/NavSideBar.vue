@@ -7,11 +7,18 @@
     class="accent-4"
     permanent
   >
-    <v-list-item dark class="horizontal-gradient" id="nav-user">
+    <v-list-item dark class="horizontal-gradient" id="nav-user" v-on:click="open">
       <v-list-item-content>
         <v-list-item-title>
           <img :src="userImage" class="nav-icon-line">
           <h3 class="nav-icon-line">&nbsp;@{{$store.state.userName}}</h3>
+        </v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+    <v-list-item dark class="horizontal-gradient dropdown" :class="{ isOpen }">
+      <v-list-item-content>
+        <v-list-item-title>
+          <h3 class="nav-icon-line">Logout</h3>
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
@@ -43,7 +50,7 @@
   export default {
     data () {
       return {
-        drawer: null,
+        isOpen: false,
         userImage: this.$store.state.userImage,
         items: [
           { title: '五等分の花嫁', imageUrl: "https://animeanime.jp/imgs/p/jtKDOVlKAvjRrNw8SXAVejagI61Nrq_oqaqr/359929.jpg", to: "/result/gotoubun" },
@@ -52,6 +59,11 @@
           { title: 'はたらく細胞', imageUrl: "https://assets.numan.tokyo/media/articles/images/000/008/367/large/b5b3dba5-f3a8-41af-b775-0bf08c1b7346.jpg?1584837573", to: "/result/hataraku" },
           { title: 'ゆるキャン△', imageUrl: "https://dengekionline.com/images/U6Eo/iVNf/gAfD/JWlv/Vkjtk62p9OOmOlk5ovvHfnSD7BsrhFp0IYEPVWKXQjNE4bjLhjQ2ETa8nvAKQkPdow0ld9prCOr91ahW.jpg", to: "/result/yurukyan" },
         ],
+      }
+    },
+    methods: { 
+      open: function () {
+        this.isOpen = !this.isOpen;
       }
     },
   }
