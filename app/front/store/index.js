@@ -1,18 +1,17 @@
 export const state = () => ({
   authUser: null,
+  userName: null,
+  userImage: null,
 });
 
 export const mutations = {
-  setUser(state, authUser) {
+  setAuthUser(state, authUser) {
     state.authUser = authUser;
   },
+  setUserName(state, userName) {
+    state.userName = userName;
+  },
+  setUserImage(state, userImage) {
+    state.userImage = userImage;
+  },
 };
-
-// export const actions = {
-//   SPAモードでは非対応
-//   nuxtServerInit({ commit }, { req }) {
-//     if (req.session && req.session.user) {
-//       commit("setUser", req.session.user);
-//     }
-//   }
-// };
