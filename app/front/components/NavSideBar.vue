@@ -7,11 +7,11 @@
     class="accent-4"
     permanent
   >
-    <v-list-item dark class="horizontal-gradient" id="nav-icon">
+    <v-list-item dark class="horizontal-gradient" id="nav-user">
       <v-list-item-content>
         <v-list-item-title>
-          <img src="https://pbs.twimg.com/profile_images/1360240155081154563/O1hSiV0j_bigger.jpg" class="nav-icon-line" width="32">
-          <h3 class="nav-icon-line">@iPhone_S_E_X</h3>
+          <img :src="userImage" class="nav-icon-line">
+          <h3 class="nav-icon-line">&nbsp;@{{$store.state.userName}}</h3>
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
@@ -44,6 +44,7 @@
     data () {
       return {
         drawer: null,
+        userImage: this.$store.state.userImage,
         items: [
           { title: '五等分の花嫁', imageUrl: "https://animeanime.jp/imgs/p/jtKDOVlKAvjRrNw8SXAVejagI61Nrq_oqaqr/359929.jpg", to: "/result/gotoubun" },
           { title: '呪術廻戦', imageUrl: "https://pbs.twimg.com/media/Epkl6M8VoAAGZAP.jpg", to: "/result/jyujyutsu" },

@@ -1,7 +1,9 @@
 <template>
   <v-app >
     <v-main>
-      <NavSideBar/>
+        <div v-if="$store.state.authUser">
+          <NavSideBar/>
+        </div>
       <v-container>
         <nuxt />
       </v-container>
