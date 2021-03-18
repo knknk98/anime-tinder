@@ -12,7 +12,7 @@ class User(db.Model):
     #email = db.Column(db.String(128), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
-    user_id = db.Column(db.Unicode(127), nullable=False)
+    session_id = db.Column(db.Unicode(255))
 
     def __repr__(self):
         return '<User id={id} name={name}>'.format(
