@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 #from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 import json
-import uuid
+#import uuid
+import hashlib
 import re
 from src.database import init_db, db
 from src.models import User,LikeUnlike,AnimeData
@@ -144,17 +145,20 @@ def create_app():
                 # ユーザー登録とセッション情報の兼ね合いがどうなるか未定なのでこのようにしておく
                 users = User.query.filter(User.name==access_token['screen_name']).all()
                 #users = User.query.filter(User.user_id==access_token['user_id']).all()
-                session_id = str(uuid.uuid4())
+
+                # セッションID生成
+                #session_id = str(uuid.uuid4())
+                session_id = hashlib.sha256(access_token['oauth_token'].encode('utf-8')).hexdigest()
                 if len(users) == 0:
                     # 存在しないなら登録処理
                     #user = User(name=user_data['screen_name'], user_id=access_token['user_id'])
-                    user = User(name=user_data['screen_name'], user_id=session_id)
+                    user = User(name=user_data['screen_name'], session_id=session_id)
                     db.session.add(user)
                     db.session.commit()
                 else:
                     print(f"hello, {users[0].name}")
                     user = User.query.filter(User.name==access_token['screen_name']).first()
-                    user.user_id = session_id
+                    user.session_id = session_id
                     db.session.commit()
                 db.session.close()
 
@@ -178,16 +182,20 @@ def create_app():
             #return '''login failed. <a href="http://localhost:3000>top</a>'''
             return f'{e}'
 
-    @app.route('/user/logout')
+    @app.route('/user/logout', methods=['GET'])
     def logout():
-        # セッション変数の削除
+        session_id = request.args.get('sessionID')
+        # セッション変数の削除（この辺今は働いてないので必要ない）
         session.pop('session_id', None)
         session.pop('user_name', None)
         session.pop('user_id', None)
+        user = User.query.filter(User.session_id==session_id).first()
+        user.session_id = None
+        db.session.commit()
         #session.pop('oauth_token', None)
         #session.pop('oauth_secret', None)
         #return redirect(url_for('login_test'))
-        return 'logout'
+        return redirect('127.0.0.1:3000')
 
     @app.route('/user/user_delete')
     def logout_and_delete():
@@ -199,6 +207,9 @@ def create_app():
         session.pop('session_id', None)
         session.pop('user_name', None)
         session.pop('user_id', None)
+        user = User.query.filter(User.session_id==session_id).first()
+        user.session_id = None
+        db.session.commit()
         #session.pop('oauth_token', None)
         #session.pop('oauth_secret', None)
         return 'logout successed and user data deleted'
@@ -207,7 +218,7 @@ def create_app():
     def fetch_recent_user_data():
         image_num = request.args.get('num')
         session_id = request.args.get('sessionID')
-        users = User.query.filter(User.user_id==session_id).first()
+        users = User.query.filter(User.session_id==session_id).first()
         if not users:
             # todo : usersテーブルに直近の結果を持たせ、そこからとってくる.
             pass
@@ -219,7 +230,7 @@ def create_app():
     def fetch_random_anime_data():
         image_num = request.args.get('num')
         session_id = request.args.get('sessionID')
-        users = User.query.filter(User.user_id==session_id).first()
+        users = User.query.filter(User.session_id==session_id).first()
         if not users:
             # todo usersテーブルに, 過去に表示したことのあるものをため込むカラムを作る. そこに入っていないものからランダムに選択する.
             # likeunlikeを参照すればいいのでは？
