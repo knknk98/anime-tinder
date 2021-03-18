@@ -3,19 +3,15 @@
     "name": "callback",
     "path": "/callback",
     "component": "/home/app/front/pages/callback.vue",
-    "chunkName": "pages/callback"
+    "chunkName": "pages/callback",
+    "_name": "_5fa2fc1a"
   },
   {
     "name": "login",
     "path": "/login",
     "component": "/home/app/front/pages/login.vue",
-    "chunkName": "pages/login"
-  },
-  {
-    "name": "result",
-    "path": "/result",
-    "component": "/home/app/front/pages/result.vue",
-    "chunkName": "pages/result"
+    "chunkName": "pages/login",
+    "_name": "_631fc3ab"
   },
   {
     "name": "result",
@@ -28,6 +24,7 @@
     "name": "index",
     "path": "/",
     "component": "/home/app/front/pages/index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_cd0fbed8"
   }
 ]

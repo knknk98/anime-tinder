@@ -2,7 +2,7 @@
     <div>
         <TheResultTextBox/>
         <TheResultAnimeInfo/>
-        <v-card>もう1回診断する</v-card>
+        <v-btn>もう1回診断する</v-btn>
     </div>
 </template>
 
