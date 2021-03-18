@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="home-background">
         <TheResultTextBox/>
         <TheResultAnimeInfo/>
         <v-btn>もう1回診断する</v-btn>
