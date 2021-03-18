@@ -18,8 +18,8 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - front',
-    title: 'front',
+    //title: process.env.npm_package_name || '',
+    titleTemplate:  '%sタイトル | オタクとアニメのマッチングサービス',
     htmlAttrs: {
       lang: 'en'
     },

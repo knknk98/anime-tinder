@@ -9,6 +9,7 @@ from src.models import User,LikeUnlike,AnimeData
 from requests_oauthlib import OAuth1Session
 from urllib.parse import parse_qsl
 from flask_cors import CORS
+from src.settings import ENV_VALUES
 
 # https://qiita.com/AndanteSysDes/items/a25acc1523fa674e7eda
 # https://qiita.com/shirakiya/items/0114d51e9c189658002e
@@ -16,9 +17,12 @@ from flask_cors import CORS
 # https://qiita.com/voygerrr/items/4c78d156fc91111798d5
 
 def create_app():
+
     # twitter api key
-    consumer_api_key = 'qOoxU6YUCvtlTu59IkrSMwrs7'
-    consumer_secret_key = 'QAzP9tbdfUof711fcD7GhiMXJPO5aE3p7GPnVEoZye96pX3XDP'
+    #consumer_api_key = 'qOoxU6YUCvtlTu59IkrSMwrs7'
+    #consumer_secret_key = 'QAzP9tbdfUof711fcD7GhiMXJPO5aE3p7GPnVEoZye96pX3XDP'
+    consumer_api_key = ENV_VALUES['CONSUMER_API_KEY']
+    consumer_secret_key = ENV_VALUES['CONSUMER_SECRET_KEY']
     # Twitter api URLs
     request_token_url = 'https://api.twitter.com/oauth/request_token'
     authorization_url = 'https://api.twitter.com/oauth/authorize'
