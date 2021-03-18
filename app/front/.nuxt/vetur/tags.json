@@ -4,5 +4,11 @@
   },
   "NavSideBar": {
     "description": "Auto imported from components/NavSideBar.vue"
+  },
+  "TheResultAnimeInfo": {
+    "description": "Auto imported from components/TheResultAnimeInfo.vue"
+  },
+  "TheResultTextBox": {
+    "description": "Auto imported from components/TheResultTextBox.vue"
   }
 }

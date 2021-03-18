@@ -8,3 +8,5 @@ You can directly use them in pages and other components without the need to impo
 
 - `<LoginButton>` | `<login-button>` (components/LoginButton.vue)
 - `<NavSideBar>` | `<nav-side-bar>` (components/NavSideBar.vue)
+- `<TheResultAnimeInfo>` | `<the-result-anime-info>` (components/TheResultAnimeInfo.vue)
+- `<TheResultTextBox>` | `<the-result-text-box>` (components/TheResultTextBox.vue)
