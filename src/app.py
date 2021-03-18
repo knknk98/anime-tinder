@@ -156,8 +156,10 @@ def create_app():
                     db.session.add(user)
                     db.session.commit()
                 else:
-                    print(f"hello, {users[0].name}")
-                    user = User.query.filter(User.name==access_token['screen_name']).first()
+                    #print(f"hello, {users[0].name}")
+                    #user = User.query.filter(User.name==access_token['screen_name']).first()
+                    user = users[0]
+                    print(f"hello, {user.name}")
                     user.session_id = session_id
                     db.session.commit()
                 db.session.close()
@@ -190,12 +192,13 @@ def create_app():
         session.pop('user_name', None)
         session.pop('user_id', None)
         user = User.query.filter(User.session_id==session_id).first()
-        user.session_id = None
-        db.session.commit()
+        if user is not None:
+            user.session_id = None
+            db.session.commit()
         #session.pop('oauth_token', None)
         #session.pop('oauth_secret', None)
         #return redirect(url_for('login_test'))
-        return redirect('127.0.0.1:3000')
+        return redirect('http://127.0.0.1:3000')
 
     @app.route('/user/user_delete')
     def logout_and_delete():
@@ -208,8 +211,9 @@ def create_app():
         session.pop('user_name', None)
         session.pop('user_id', None)
         user = User.query.filter(User.session_id==session_id).first()
-        user.session_id = None
-        db.session.commit()
+        if user is not None:
+            user.session_id = None
+            db.session.commit()
         #session.pop('oauth_token', None)
         #session.pop('oauth_secret', None)
         return 'logout successed and user data deleted'
