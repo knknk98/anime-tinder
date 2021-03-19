@@ -13,6 +13,8 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
     session_id = db.Column(db.Unicode(255))
 
+    likeunlike = db.relationship('LikeUnlike', backref='users')
+
     def __repr__(self):
         return '<User id={id} name={name}>'.format(
                 id=self.id, name=self.name)
@@ -29,11 +31,13 @@ class AnimeData(db.Model):
     genre = db.Column(db.Unicode(255), nullable=False)
     company = db.Column(db.Unicode(255), nullable=False)
 
+    likeunlike = db.relationship('LikeUnlike', backref='anime_data')
+
 class LikeUnlike(db.Model):
     __tablename__ = 'likeunlike'
     __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True, unique=True)
-    user_id = db.Column(db.Integer, nullable=False)
-    anime_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    anime_id = db.Column(db.Integer, db.ForeignKey('anime_data.anime_id'), nullable=False)
     status = db.Column(db.Integer, nullable=False)

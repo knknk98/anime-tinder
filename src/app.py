@@ -10,6 +10,7 @@ from requests_oauthlib import OAuth1Session
 from urllib.parse import parse_qsl
 from flask_cors import CORS
 from src.settings import ENV_VALUES
+from src.utils import img_encode
 
 # https://qiita.com/AndanteSysDes/items/a25acc1523fa674e7eda
 # https://qiita.com/shirakiya/items/0114d51e9c189658002e
@@ -235,17 +236,67 @@ def create_app():
     def fetch_random_anime_data():
         image_num = request.args.get('num')
         session_id = request.args.get('sessionID')
-        users = User.query.filter(User.session_id==session_id).first()
-        if not users:
+        # テストするときはパラメータが無いので他で適当にfilter
+        #user = User.query.filter(User.session_id==session_id).first()
+        image_num = '3'
+        user = User.query.filter(User.name=="Kw_I_KU").first()
+        if user is not None:
             # todo usersテーブルに, 過去に表示したことのあるものをため込むカラムを作る. そこに入っていないものからランダムに選択する.
             # likeunlikeを参照すればいいのでは？
-            pass
+            lu_data = db.session.query(LikeUnlike).\
+                        filter(LikeUnlike.user_id==user.user_id).all()
+            past_animes = [lu.anime_id for lu in lu_data]
+            animes = db.session.query(AnimeData).\
+                        filter(AnimeData.anime_id.notin_(past_animes)).limit(int(image_num)).all()
+            response_data = {'anime'+str(i):\
+                                {'id': anime.anime_id,
+                                 'title': anime.title,
+                                 #'image': anime.image, # 画像をbase64で返す仕様についてはあとで
+                                 'image': img_encode(animes[0].image),
+                                 'description': anime.description,
+                                 'year': anime.year,
+                                 'genre': anime.genre,
+                                 'company': anime.company
+                                 }\
+                             for i,anime in enumerate(animes)}
+            return jsonify(response_data)
         else:
-            return redirect(url_for('get_twitter_request_token'))
+            return redirect('http://127.0.0.1:3000')
 
+    @app.route('/test')
     def user_anime_matrix():
         # todo: user_idとanime_idを縦横にもち値がstatusの二次元配列を返す
+        all_users = User.query.all()
+        user_num = len(all_users)
+        user_id_list = [user.user_id for user in all_users]
+        res = []
+        for user_id in user_id_list:
+            # ユーザーひとりに対してアニメに対するlikeunlikeのstatusを取得, リストで保持する.
+            lu_data = db.session.query(LikeUnlike).\
+                        join(LikeUnlike, AnimeData.anime_id==LikeUnlike.anime_id).\
+                        filter(LikeUnlike.user_id==user_id).all()
+            user_status_list = []
         pass
+
+    '''
+    @app.route('/test')
+    def testfunc():
+        anime = AnimeData.query.filter(AnimeData.year.like('%2019%')).all()
+        response_data = {'anime'+str(i):{'title': a.title, 'desc': a.description} for i,a in enumerate(anime)}
+        #print(session)
+        return jsonify(response_data)
+
+    @app.route('/test2')
+    def testfunc2():
+        lu_data = db.session.query(AnimeData,LikeUnlike).\
+                    join(LikeUnlike, AnimeData.anime_id==LikeUnlike.anime_id).\
+                    filter(LikeUnlike.user_id==1).all()
+        print(lu_data)
+        return 'test2'
+        response_data = {'anime'+str(i):{'user': lu.title, 'desc': lu.description} for i,lu in enumerate(lu_data)}
+        #print(session)
+        return jsonify(response_data)
+    '''
 
     return app
 
