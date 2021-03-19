@@ -243,6 +243,10 @@ def create_app():
         else:
             return redirect(url_for('get_twitter_request_token'))
 
+    def user_anime_matrix():
+        # todo: user_idとanime_idを縦横にもち値がstatusの二次元配列を返す
+        pass
+
     return app
 
 
