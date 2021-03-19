@@ -2,7 +2,7 @@
   <div>
       <v-container>
           <v-row>
-              <v-col cols=13 md=3>
+              <v-col cols=12 md=3>
                   <v-img
                     src="https://www.lisani.jp/admin/wp-content/uploads/2021/01/2101101800-yh-001.jpg"
                     aspect-ratio=0.75
@@ -27,13 +27,13 @@
 
                   <div>
                     <v-row>
-                        <v-col cols=12 md=9>
+                        <v-col cols=12 md=8>
                             <h4>#2021年春 #ハーレム #ラブコメ #学園</h4>　
                             <a href="https://anime.dmkt-sp.jp/animestore/ci_pc?workId=24410">dアニメストア</a>
                             <a href="https://www.amazon.co.jp/gp/video/detail/B07M7F3HVP/ref=atv_dp_share_cu_r">Amazon Prime Video</a>
                         </v-col>
-                        <v-col cols=12 md=3>
-                            <v-btn>もう1回診断する</v-btn>
+                        <v-col cols=12 md=4>
+                            <v-btn block>もう1回診断する</v-btn>
                         </v-col>
                     </v-row>
                   </div>
