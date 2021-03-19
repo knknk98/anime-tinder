@@ -11,6 +11,7 @@ from urllib.parse import parse_qsl
 from flask_cors import CORS
 from src.settings import ENV_VALUES
 from src.utils import img_encode
+from sqlalchemy import desc,asc
 
 # https://qiita.com/AndanteSysDes/items/a25acc1523fa674e7eda
 # https://qiita.com/shirakiya/items/0114d51e9c189658002e
@@ -238,7 +239,7 @@ def create_app():
         session_id = request.args.get('sessionID')
         # テストするときはパラメータが無いので他で適当にfilter
         #user = User.query.filter(User.session_id==session_id).first()
-        image_num = '3'
+        image_num = '4'
         user = User.query.filter(User.name=="Kw_I_KU").first()
         if user is not None:
             # todo usersテーブルに, 過去に表示したことのあるものをため込むカラムを作る. そこに入っていないものからランダムに選択する.
@@ -268,15 +269,43 @@ def create_app():
         # todo: user_idとanime_idを縦横にもち値がstatusの二次元配列を返す
         all_users = User.query.all()
         user_num = len(all_users)
+        anime_num = len(AnimeData.query.all())
         user_id_list = [user.user_id for user in all_users]
+        print('user_id_list:', user_id_list)
         res = []
         for user_id in user_id_list:
             # ユーザーひとりに対してアニメに対するlikeunlikeのstatusを取得, リストで保持する.
-            lu_data = db.session.query(LikeUnlike).\
+            '''
+            lu_data = db.session.query(LikeUnlike,AnimeData).\
                         join(LikeUnlike, AnimeData.anime_id==LikeUnlike.anime_id).\
-                        filter(LikeUnlike.user_id==user_id).all()
-            user_status_list = []
-        pass
+                        filter(LikeUnlike.user_id==user_id).order_by(asc(LikeUnlike.anime_id)).all()
+            '''
+            lu_data = db.session.query(LikeUnlike).\
+                        filter(LikeUnlike.user_id==user_id).order_by(asc(LikeUnlike.anime_id)).all()
+            #print(lu_data)
+
+            if lu_data is not None:
+                # そのユーザーがlike_unlikeを一つでも設定しているなら
+                user_status_list = []
+                index = 1 # user_status_listの要素数は最終的にanime_numにならないといけないのでそのようにする
+                for data in lu_data:
+                    data_anime_id = data.anime_id
+                    data_status = data.status
+                    # 前のループの次の場所からこのループのanime_idの場所まで0で埋める（デフォルト値）
+                    user_status_list.extend([0]*(data_anime_id - index))
+                    # このループのデータをいれる
+                    user_status_list.append(data_status)
+                    # インデックスを更新する
+                    index = data_anime_id + 1
+                # 終わったら最後までを0で埋める.
+                user_status_list.extend([0]*(anime_num + 1 - index))
+            else:
+                # 一つもlike_unlikeをしていないなら全て0で埋める
+                user_status_list = [0]*anime_num
+            res.append(user_status_list)
+        #return jsonify(res) # 確認用
+        # アニメID順にステータスが並んだリストがユーザーごとに並んでいる二次元リストを返す.
+        return res
 
     '''
     @app.route('/test')
