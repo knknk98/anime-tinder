@@ -2,9 +2,8 @@
     <div class="home-background pa-5">
         <TheResultTextBox/>
         <TheResultAnimeInfo/>
-        <v-btn class="ma-3">もう1回診断する</v-btn>
         <CaptionBox title="結果をツイートする" />
-        <TweetButton/>
+        <SNSShareButton/>
         <CaptionBox title="みんなの診断結果" />
     </div>
 </template>
@@ -13,7 +12,7 @@
 import TheResultTextBox from '~/components/TheResultTextBox.vue'
 import TheResultAnimeInfo from '~/components/TheResultAnimeInfo.vue'
 import CaptionBox from '~/components/CaptionBox.vue'
-import TweetButton from '~/components/TweetButton.vue'
+import SNSShareButton from '~/components/SNSShareButton.vue'
 
 export default {
   // middleware: 'authenticated',
@@ -21,7 +20,7 @@ export default {
       TheResultTextBox,
       TheResultAnimeInfo,
       CaptionBox,
-      TweetButton,
+      SNSShareButton,
   }
 }
 </script>

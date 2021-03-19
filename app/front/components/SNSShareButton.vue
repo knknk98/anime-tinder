@@ -19,7 +19,6 @@
         auto-grow
         :rules="rules"
         :value="value"
-        clearable
         counter
         background-color="white"
       ></v-textarea>

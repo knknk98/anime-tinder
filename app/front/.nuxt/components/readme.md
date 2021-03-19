@@ -9,6 +9,6 @@ You can directly use them in pages and other components without the need to impo
 - `<CaptionBox>` | `<caption-box>` (components/CaptionBox.vue)
 - `<LoginButton>` | `<login-button>` (components/LoginButton.vue)
 - `<NavSideBar>` | `<nav-side-bar>` (components/NavSideBar.vue)
+- `<SNSShareButton>` | `<s-n-s-share-button>` (components/SNSShareButton.vue)
 - `<TheResultAnimeInfo>` | `<the-result-anime-info>` (components/TheResultAnimeInfo.vue)
 - `<TheResultTextBox>` | `<the-result-text-box>` (components/TheResultTextBox.vue)
-- `<TweetButton>` | `<tweet-button>` (components/TweetButton.vue)
