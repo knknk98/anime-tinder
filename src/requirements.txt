@@ -10,3 +10,6 @@ flask_marshmallow
 marshmallow-sqlalchemy
 requests_oauthlib
 flask-cors
+bs4
+logzero
+requests
