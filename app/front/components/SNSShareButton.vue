@@ -8,7 +8,7 @@
           <v-col cols=3>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn @click="share('twitter')" color="#1C9BE9" dark block depressed v-bind="attrs" v-on="on"><v-icon>mdi-twitter</v-icon></v-btn>
+                <v-btn @click="share('twitter')" color="#1C9BE9" dark block v-bind="attrs" v-on="on"><v-icon>mdi-twitter</v-icon></v-btn>
               </template>
             <span>Twitterで共有する</span>
             </v-tooltip>
@@ -17,7 +17,7 @@
           <v-col cols=3>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn @click="share('line')" color="#06C755" dark block depressed v-bind="attrs" v-on="on"><strong>LINE</strong></v-btn>
+                <v-btn @click="share('line')" color="#06C755" dark block v-bind="attrs" v-on="on"><strong>LINE</strong></v-btn>
               </template>
               <span>LINEで共有する</span>
             </v-tooltip>
@@ -26,7 +26,7 @@
           <v-col cols=3>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn @click="share('facebook')" color="#4064AC" dark block depressed v-bind="attrs" v-on="on"><v-icon>mdi-facebook</v-icon></v-btn>
+                <v-btn @click="share('facebook')" color="#4064AC" dark block v-bind="attrs" v-on="on"><v-icon>mdi-facebook</v-icon></v-btn>
               </template>
               <span>Facebookで共有する</span>
             </v-tooltip>
@@ -35,7 +35,7 @@
           <v-col cols=3>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn @click="share('hatena')" color="#00A4DE" dark block depressed v-bind="attrs" v-on="on"><strong>B!</strong></v-btn>
+                <v-btn @click="share('hatena')" color="#00A4DE" dark block v-bind="attrs" v-on="on"><strong>B!</strong></v-btn>
               </template>
               <span>はてなブックマークで共有する</span>
             </v-tooltip>
