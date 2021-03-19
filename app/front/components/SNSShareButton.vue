@@ -40,7 +40,7 @@
               <span>はてなブックマークで共有する</span>
             </v-tooltip>
           </v-col>
-          
+
         </v-row>
       </v-container>
     </div>

@@ -28,9 +28,12 @@
                   <div>
                     <v-row>
                         <v-col cols=12 md=8>
-                            <h4>#2021年春 #ハーレム #ラブコメ #学園</h4>　
-                            <a href="https://anime.dmkt-sp.jp/animestore/ci_pc?workId=24410">dアニメストア</a>
-                            <a href="https://www.amazon.co.jp/gp/video/detail/B07M7F3HVP/ref=atv_dp_share_cu_r">Amazon Prime Video</a>
+                            <h4>#2021年春 #ハーレム #ラブコメ #学園</h4>
+                            <v-btn href="https://anime.dmkt-sp.jp/animestore/ci_pc?workId=24410" color="#EB5528" depressed dark x-small>
+                                <strong>dアニメストア</strong></v-btn>
+                            <v-btn href="https://www.amazon.co.jp/gp/video/detail/B07M7F3HVP/ref=atv_dp_share_cu_r" color="#01A7E1" depressed dark x-small>
+                                Amazon Prime Video
+                            </v-btn>
                         </v-col>
                         <v-col cols=12 md=4>
                             <v-btn block depressed color="white">もう1回診断する</v-btn>
