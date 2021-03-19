@@ -33,7 +33,7 @@
                             <a href="https://www.amazon.co.jp/gp/video/detail/B07M7F3HVP/ref=atv_dp_share_cu_r">Amazon Prime Video</a>
                         </v-col>
                         <v-col cols=12 md=4>
-                            <v-btn block>もう1回診断する</v-btn>
+                            <v-btn block depressed color="white">もう1回診断する</v-btn>
                         </v-col>
                     </v-row>
                   </div>
