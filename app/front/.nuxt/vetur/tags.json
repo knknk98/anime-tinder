@@ -1,4 +1,7 @@
 {
+  "CaptionBox": {
+    "description": "Auto imported from components/CaptionBox.vue"
+  },
   "LoginButton": {
     "description": "Auto imported from components/LoginButton.vue"
   },
@@ -10,5 +13,8 @@
   },
   "TheResultTextBox": {
     "description": "Auto imported from components/TheResultTextBox.vue"
+  },
+  "TweetButton": {
+    "description": "Auto imported from components/TweetButton.vue"
   }
 }
