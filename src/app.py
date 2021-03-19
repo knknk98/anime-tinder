@@ -17,10 +17,7 @@ from src.settings import ENV_VALUES
 # https://qiita.com/voygerrr/items/4c78d156fc91111798d5
 
 def create_app():
-
     # twitter api key
-    #consumer_api_key = 'qOoxU6YUCvtlTu59IkrSMwrs7'
-    #consumer_secret_key = 'QAzP9tbdfUof711fcD7GhiMXJPO5aE3p7GPnVEoZye96pX3XDP'
     consumer_api_key = ENV_VALUES['CONSUMER_API_KEY']
     consumer_secret_key = ENV_VALUES['CONSUMER_SECRET_KEY']
     # Twitter api URLs
