@@ -14,7 +14,7 @@ export default {
     }
   },
   async mounted() {
-    await axios.get('http://127.0.0.1:5000/user/callback', {
+    await axios.get(this.$config.serverURL+'/user/callback', {
       params: this.$route.query,
     }).then(res => {
       // set session

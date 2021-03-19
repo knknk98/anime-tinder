@@ -72,7 +72,7 @@ export default {
       this.$store.commit('setUserName', null);
       this.$store.commit('setUserImage', null);
       // logoutされてからリダイレクト
-      await axios.get('http://127.0.0.1:5000/user/logout', {
+      await axios.get(this.$config.serverURL + '/user/logout', {
         params: auth,
       }).then(res => {
         // logout
