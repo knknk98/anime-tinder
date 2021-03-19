@@ -15,7 +15,7 @@
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
-    <v-list-item dark class="horizontal-gradient dropdown" :class="{ isOpen }">
+    <v-list-item dark class="horizontal-gradient" id="nav-logout" :class="{ isOpen }" v-on:click="logout">
       <v-list-item-content>
         <v-list-item-title>
           <h3 class="nav-icon-line">Logout</h3>
@@ -47,24 +47,40 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        isOpen: false,
-        userImage: this.$store.state.userImage,
-        items: [
-          { title: '五等分の花嫁', imageUrl: "https://animeanime.jp/imgs/p/jtKDOVlKAvjRrNw8SXAVejagI61Nrq_oqaqr/359929.jpg", to: "/result/gotoubun" },
-          { title: '呪術廻戦', imageUrl: "https://pbs.twimg.com/media/Epkl6M8VoAAGZAP.jpg", to: "/result/jyujyutsu" },
-          { title: 'リゼロ', imageUrl: "https://eiga.k-img.com/images/anime/news/112498/photo/a8c42bc0e5f54dc2/320.jpg?1607668254", to: "/result/rezero" },
-          { title: 'はたらく細胞', imageUrl: "https://assets.numan.tokyo/media/articles/images/000/008/367/large/b5b3dba5-f3a8-41af-b775-0bf08c1b7346.jpg?1584837573", to: "/result/hataraku" },
-          { title: 'ゆるキャン△', imageUrl: "https://dengekionline.com/images/U6Eo/iVNf/gAfD/JWlv/Vkjtk62p9OOmOlk5ovvHfnSD7BsrhFp0IYEPVWKXQjNE4bjLhjQ2ETa8nvAKQkPdow0ld9prCOr91ahW.jpg", to: "/result/yurukyan" },
-        ],
-      }
+import axios from 'axios';
+export default {
+  data () {
+    return {
+      isOpen: false,
+      userImage: this.$store.state.userImage,
+      items: [
+        { title: '五等分の花嫁', imageUrl: "https://animeanime.jp/imgs/p/jtKDOVlKAvjRrNw8SXAVejagI61Nrq_oqaqr/359929.jpg", to: "/result/gotoubun" },
+        { title: '呪術廻戦', imageUrl: "https://pbs.twimg.com/media/Epkl6M8VoAAGZAP.jpg", to: "/result/jyujyutsu" },
+        { title: 'リゼロ', imageUrl: "https://eiga.k-img.com/images/anime/news/112498/photo/a8c42bc0e5f54dc2/320.jpg?1607668254", to: "/result/rezero" },
+        { title: 'はたらく細胞', imageUrl: "https://assets.numan.tokyo/media/articles/images/000/008/367/large/b5b3dba5-f3a8-41af-b775-0bf08c1b7346.jpg?1584837573", to: "/result/hataraku" },
+        { title: 'ゆるキャン△', imageUrl: "https://dengekionline.com/images/U6Eo/iVNf/gAfD/JWlv/Vkjtk62p9OOmOlk5ovvHfnSD7BsrhFp0IYEPVWKXQjNE4bjLhjQ2ETa8nvAKQkPdow0ld9prCOr91ahW.jpg", to: "/result/yurukyan" },
+      ],
+    }
+  },
+  methods: { 
+    open: function () {
+      this.isOpen = !this.isOpen;
     },
-    methods: { 
-      open: function () {
-        this.isOpen = !this.isOpen;
-      }
+    logout: async function () {
+      var auth = this.$store.state.authUser;
+      this.$store.commit('setAuthUser', null);
+      this.$store.commit('setUserName', null);
+      this.$store.commit('setUserImage', null);
+      // logoutされてからリダイレクト
+      await axios.get('http://127.0.0.1:5000/user/logout', {
+        params: auth,
+      }).then(res => {
+        // logout
+        this.$router.push('/login');
+      }).catch(err => {
+        // error
+      });
     },
-  }
+  },
+}
 </script>

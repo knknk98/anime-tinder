@@ -18,8 +18,6 @@ export default {
     NavSideBar,
   },
   mounted(){
-    console.log(this.$store.state.authUser);
-    console.log(this.$route.name);
   }
 }
 </script>
