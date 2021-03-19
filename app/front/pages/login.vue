@@ -2,7 +2,7 @@
   <div id="container">
     <div id="login-gridA">
       <div class="block-box">
-        <h1>ここにタイトルを入れる。</h1>
+        <h1>タイトル</h1>
         <h2 class="catchcopy">オタクは急展開する。アニメひとつで。</h2>
         <br><br>
         <LoginButton/>
@@ -18,6 +18,11 @@ export default {
   // middleware: 'authenticated',
   components: {
     LoginButton
-  }
+  },
+  head() {
+    return {
+      title: 'ログイン・',
+    }
+  },
 }
 </script>

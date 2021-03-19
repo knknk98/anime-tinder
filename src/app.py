@@ -1,13 +1,15 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 #from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 import json
-import uuid
+#import uuid
+import hashlib
 import re
 from src.database import init_db, db
 from src.models import User,LikeUnlike,AnimeData
 from requests_oauthlib import OAuth1Session
 from urllib.parse import parse_qsl
 from flask_cors import CORS
+from src.settings import ENV_VALUES
 
 # https://qiita.com/AndanteSysDes/items/a25acc1523fa674e7eda
 # https://qiita.com/shirakiya/items/0114d51e9c189658002e
@@ -16,8 +18,8 @@ from flask_cors import CORS
 
 def create_app():
     # twitter api key
-    consumer_api_key = 'qOoxU6YUCvtlTu59IkrSMwrs7'
-    consumer_secret_key = 'QAzP9tbdfUof711fcD7GhiMXJPO5aE3p7GPnVEoZye96pX3XDP'
+    consumer_api_key = ENV_VALUES['CONSUMER_API_KEY']
+    consumer_secret_key = ENV_VALUES['CONSUMER_SECRET_KEY']
     # Twitter api URLs
     request_token_url = 'https://api.twitter.com/oauth/request_token'
     authorization_url = 'https://api.twitter.com/oauth/authorize'
@@ -141,15 +143,30 @@ def create_app():
 
             if response.status_code == 200:
                 user_data = json.loads(response.text)
-                users = User.query.filter(User.user_id==access_token['user_id']).all()
+                # ユーザー登録とセッション情報の兼ね合いがどうなるか未定なのでこのようにしておく
+                users = User.query.filter(User.name==access_token['screen_name']).all()
+                #users = User.query.filter(User.user_id==access_token['user_id']).all()
+
+                # セッションID生成
+                #session_id = str(uuid.uuid4())
+                session_id = hashlib.sha256(access_token['oauth_token'].encode('utf-8')).hexdigest()
                 if len(users) == 0:
                     # 存在しないなら登録処理
-                    user = User(name=user_data['screen_name'], user_id=access_token['user_id'])
+                    #user = User(name=user_data['screen_name'], user_id=access_token['user_id'])
+                    user = User(name=user_data['screen_name'], session_id=session_id)
                     db.session.add(user)
                     db.session.commit()
+                else:
+                    #print(f"hello, {users[0].name}")
+                    #user = User.query.filter(User.name==access_token['screen_name']).first()
+                    user = users[0]
+                    print(f"hello, {user.name}")
+                    user.session_id = session_id
+                    db.session.commit()
+                db.session.close()
 
                 # セッション変数の設定
-                session['session_id'] = str(uuid.uuid4())
+                session['session_id'] = session_id
                 session['user_name'] = access_token['screen_name']
                 session['user_id'] = access_token['user_id']
                 # session['oauth_token'] = access_token['oauth_token']
@@ -168,29 +185,63 @@ def create_app():
             #return '''login failed. <a href="http://localhost:3000>top</a>'''
             return f'{e}'
 
-    @app.route('/user/logout')
+    @app.route('/user/logout', methods=['GET'])
     def logout():
-        # セッション変数の削除
+        session_id = request.args.get('sessionID')
+        # セッション変数の削除（この辺今は働いてないので必要ない）
         session.pop('session_id', None)
         session.pop('user_name', None)
         session.pop('user_id', None)
-        session.pop('oauth_token', None)
-        session.pop('oauth_secret', None)
+        user = User.query.filter(User.session_id==session_id).first()
+        if user is not None:
+            user.session_id = None
+            db.session.commit()
+        #session.pop('oauth_token', None)
+        #session.pop('oauth_secret', None)
         #return redirect(url_for('login_test'))
-        return 'logout'
+        return redirect('http://127.0.0.1:3000')
 
     @app.route('/user/user_delete')
     def logout_and_delete():
         # データベースからユーザー情報を削除
-        db.session.query(User).filter(User.id==session['user_id']).delete()
+        User.query.filter(User.name==access_token['screen_name']).delete()
         db.session.commit()
+        db.session.close()
         # セッション変数の削除
         session.pop('session_id', None)
         session.pop('user_name', None)
         session.pop('user_id', None)
-        session.pop('oauth_token', None)
-        session.pop('oauth_secret', None)
+        user = User.query.filter(User.session_id==session_id).first()
+        if user is not None:
+            user.session_id = None
+            db.session.commit()
+        #session.pop('oauth_token', None)
+        #session.pop('oauth_secret', None)
         return 'logout successed and user data deleted'
+
+    @app.route('/user/recent', methods=['GET'])
+    def fetch_recent_user_data():
+        image_num = request.args.get('num')
+        session_id = request.args.get('sessionID')
+        users = User.query.filter(User.session_id==session_id).first()
+        if not users:
+            # todo : usersテーブルに直近の結果を持たせ、そこからとってくる.
+            pass
+        else:
+            return redirect(url_for('get_twitter_request_token'))
+
+    # 指定した数(num)だけカードに表示するアニメの情報を取ってくる。DBにアクセスし、過去に表示したカード以外から適当に選んでくる。
+    @app.route('/app/recs', methods=['GET'])
+    def fetch_random_anime_data():
+        image_num = request.args.get('num')
+        session_id = request.args.get('sessionID')
+        users = User.query.filter(User.session_id==session_id).first()
+        if not users:
+            # todo usersテーブルに, 過去に表示したことのあるものをため込むカラムを作る. そこに入っていないものからランダムに選択する.
+            # likeunlikeを参照すればいいのでは？
+            pass
+        else:
+            return redirect(url_for('get_twitter_request_token'))
 
     return app
 
