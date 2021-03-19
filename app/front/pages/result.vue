@@ -2,7 +2,7 @@
     <div class="home-background">
         <TheResultTextBox/>
         <TheResultAnimeInfo/>
-        <CaptionBox title="結果をツイートする" />
+        <CaptionBox title="結果をシェアする" />
         <SNSShareButton/>
         <CaptionBox title="みんなの診断結果" />
     </div>

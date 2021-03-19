@@ -1,10 +1,42 @@
 <template>
   <div>
+    <div v-if="this.windowSize>=600">
+      <v-container>
+        <v-row>
+          <v-col cols=3>
+            <v-btn @click="share('twitter')" color="#1C9BE9" dark block depressed><v-icon>mdi-twitter</v-icon></v-btn>
+          </v-col>
+          <v-col cols=3>
+            <v-btn @click="share('line')" color="#06C755" dark block depressed><strong>LINE</strong></v-btn>
+          </v-col>
+          <v-col cols=3>
+            <v-btn @click="share('facebook')" color="#4064AC" dark block depressed><v-icon>mdi-facebook</v-icon></v-btn>
+          </v-col>
+          <v-col cols=3>
+            <v-btn @click="share('hatena')" color="#00A4DE" dark block depressed><strong>B!</strong></v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
 
-    <v-btn @click="share('twitter')">Twitterでシェア</v-btn>
-    <v-btn @click="share('facebook')">Facebookでシェア</v-btn>
-    <v-btn @click="share('line')">Lineでシェア</v-btn>
-    <v-btn @click="share('hatena')">はてなでシェア</v-btn>
+    <div v-else>
+      <v-container>
+        <v-row>
+          <v-col cols=3>
+            <v-btn @click="share('twitter')" color="#1C9BE9" dark block fab depressed><v-icon>mdi-twitter</v-icon></v-btn>
+          </v-col>
+          <v-col cols=3>
+            <v-btn @click="share('line')" color="#06C755" dark block fab depressed><strong>LINE</strong></v-btn>
+          </v-col>
+          <v-col cols=3>
+            <v-btn @click="share('facebook')" color="#4064AC" dark block fab depressed><v-icon>mdi-facebook</v-icon></v-btn>
+          </v-col>
+          <v-col cols=3>
+            <v-btn @click="share('hatena')" color="#00A4DE" dark block fab depressed><strong>B!</strong></v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
 
     <v-container fluid>
       <v-textarea
@@ -31,7 +63,9 @@
       text: "ここにツイート文を表示",
       hashtag: "aaa,bbb",
       value: "ここにツイート文を表示 #aaa #bbb",
+      windowSize: window.innerWidth
     }),
+
     methods: {
       share(sns) {
         const shareUrl = "https://example.com"
@@ -55,7 +89,17 @@
         }else{
           window.open(href, '_blank',"rel=nofollow noopener noreferrer")
         }
+      },
+
+      handleResize: function(){
+        this.windowSize = window.innerWidth;
       }
+    },
+    mounted: function () {
+      window.addEventListener('resize', this.handleResize)
+    },
+    beforeDestroy: function () {
+      window.removeEventListener('resize', this.handleResize)
     }
   }
 </script>
