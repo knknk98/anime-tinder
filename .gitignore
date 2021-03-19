@@ -132,3 +132,4 @@ node_modules
 .DS_Store
 mysql/mysql_data/*
 app/front.nuxt/
+collecting_content/download
