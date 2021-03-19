@@ -66,20 +66,26 @@ export default {
     open: function () {
       this.isOpen = !this.isOpen;
     },
-    logout: async function () {
-      var auth = this.$store.state.authUser;
+    logout: function () {
+      // var auth = this.$store.state.authUser;
+      // // logoutされてからリダイレクト
+      // await axios.get(this.$config.serverURL + '/user/logout', {
+      //   params: auth,
+      // }).then(res => {
+      //   // logout
+      //   this.$store.commit('setAuthUser', null);
+      //   this.$store.commit('setUserName', null);
+      //   this.$store.commit('setUserImage', null);
+      //   this.$router.push('/login');
+      // }).catch(err => {
+      //   // error
+      // });
+
+      // サーバからのリダイレクトがうまくいかない。一旦簡易的にログアウト
       this.$store.commit('setAuthUser', null);
       this.$store.commit('setUserName', null);
       this.$store.commit('setUserImage', null);
-      // logoutされてからリダイレクト
-      await axios.get(this.$config.serverURL + '/user/logout', {
-        params: auth,
-      }).then(res => {
-        // logout
-        this.$router.push('/login');
-      }).catch(err => {
-        // error
-      });
+      this.$router.push('/login');
     },
   },
 }
