@@ -21,6 +21,9 @@
         :value="value"
         counter
         background-color="white"
+        append-icon="mdi-content-copy"
+        @click:append="writeToClipboard"
+        clearable
       ></v-textarea>
     </v-container>
   </div>
@@ -33,6 +36,10 @@
       rules: [v => v.length <= 140 || 'Max 140 characters'],
       value: "ここにツイート文を表示",
     }),
+    method: {
+      writeToClipboard() {
+      },
+    },
   }
 </script>
 
