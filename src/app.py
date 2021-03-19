@@ -225,9 +225,19 @@ def create_app():
     def fetch_recent_user_data():
         image_num = request.args.get('num')
         session_id = request.args.get('sessionID')
-        users = User.query.filter(User.session_id==session_id).first()
-        if not users:
+        user = User.query.filter(User.session_id==session_id).first()
+        image_num = '4'
+        user = User.query.filter(User.name=="Kw_I_KU").first()
+        if user is not None:
             # todo : usersテーブルに直近の結果を持たせ、そこからとってくる.
+            # likeunlikeの日付データを見て一番新しいやつを持ってくれば良い.
+            joined_data = db.session.query(LikeUnlike,AnimeData).\
+                        join(LikeUnlike, AnimeData.anime_id==LikeUnlike.anime_id).\
+                        filter(LikeUnlike.user_id==user.user_id).\
+                        order_by(desc(LikeUnlike.updated_at)).limit(int(image_num)).all()
+            response_data = {'anime'+str(i): img_encode(data[1].image) for i,data in enumerate(joined_data)}
+            print([data[1].image for data in joined_data])
+            return jsonify(response_data)
             pass
         else:
             return redirect(url_for('get_twitter_request_token'))
@@ -247,13 +257,14 @@ def create_app():
             lu_data = db.session.query(LikeUnlike).\
                         filter(LikeUnlike.user_id==user.user_id).all()
             past_animes = [lu.anime_id for lu in lu_data]
+            # 過去に表示したことがあるものを含まないものからimage_num個に制限してとってくる
             animes = db.session.query(AnimeData).\
                         filter(AnimeData.anime_id.notin_(past_animes)).limit(int(image_num)).all()
             response_data = {'anime'+str(i):\
                                 {'id': anime.anime_id,
                                  'title': anime.title,
                                  #'image': anime.image, # 画像をbase64で返す仕様についてはあとで
-                                 'image': img_encode(animes[0].image),
+                                 'image': img_encode(anime.image),
                                  'description': anime.description,
                                  'year': anime.year,
                                  'genre': anime.genre,
