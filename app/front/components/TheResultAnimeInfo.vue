@@ -2,7 +2,7 @@
   <div>
       <v-container>
           <v-row>
-              <v-col cols=3>
+              <v-col cols=12 sm=3>
                   <v-img
                     src="https://www.lisani.jp/admin/wp-content/uploads/2021/01/2101101800-yh-001.jpg"
                     aspect-ratio=0.75
@@ -11,10 +11,10 @@
                     >
                   </v-img>
               </v-col>
-              <v-col cols=9>
+              <v-col cols=12 sm=9>
                   <!--アニメの概要-->
                   <v-card flat>
-                      <p class="text-h6 pa-4">
+                      <p class="text-md-h6 pa-4">
                           貧乏な生活を送る高校２年生・上杉風太郎のもとに、好条件の家庭教師アルバイトの話が舞い込む。ところが教え子はなんと同級生！！　しかも五つ子だった！！全員美少女、だけど「落第寸前」「勉強嫌い」の問題児！最初の課題は姉妹からの信頼を勝ち取ること…！？毎日がお祭り騒ぎ！ 中野家の五つ子が贈る、かわいさ500％の五人五色ラブコメ開演！！
                       </p>
                   </v-card>
@@ -27,12 +27,12 @@
 
                   <div>
                     <v-row>
-                        <v-col cols=9>
+                        <v-col cols=12 sm=9>
                             <h4>#2021年春 #ハーレム #ラブコメ #学園</h4>　
                             <a href="https://anime.dmkt-sp.jp/animestore/ci_pc?workId=24410">dアニメストア</a>
                             <a href="https://www.amazon.co.jp/gp/video/detail/B07M7F3HVP/ref=atv_dp_share_cu_r">Amazon Prime Video</a>
                         </v-col>
-                        <v-col cols=3>
+                        <v-col cols=12 sm=3>
                             <v-btn>もう1回診断する</v-btn>
                         </v-col>
                     </v-row>

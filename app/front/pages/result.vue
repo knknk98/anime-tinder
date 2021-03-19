@@ -1,5 +1,5 @@
 <template>
-    <div class="home-background pa-5">
+    <div class="home-background">
         <TheResultTextBox/>
         <TheResultAnimeInfo/>
         <CaptionBox title="結果をツイートする" />

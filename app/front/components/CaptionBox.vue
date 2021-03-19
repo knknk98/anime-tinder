@@ -1,6 +1,6 @@
 <template>
   <div class="horizontal-gradient text-center ma-3 rounded-lg">
-      <h1>{{title}}</h1>
+      <div class="text-md-h4">{{title}}</div>
   </div>
 </template>
 
