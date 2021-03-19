@@ -8,6 +8,11 @@
 import axios from 'axios';
 
 export default {
+  head() {
+    return {
+      title: '',
+    }
+  },
   async mounted() {
     await axios.get('http://127.0.0.1:5000/user/callback', {
       params: this.$route.query,

@@ -19,6 +19,11 @@
 import axios from 'axios';
 
 export default {
-  // middleware: 'authenticated',
+  middleware: 'authenticated',
+  head() {
+    return {
+      title: '',
+    }
+  },
 };
 </script>
