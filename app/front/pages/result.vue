@@ -2,7 +2,7 @@
     <div class="home-background pa-5">
         <TheResultTextBox/>
         <TheResultAnimeInfo/>
-        <v-btn>もう1回診断する</v-btn>
+        <v-btn class="ma-3">もう1回診断する</v-btn>
         <CaptionBox title="結果をツイートする" />
         <TweetButton/>
         <CaptionBox title="みんなの診断結果" />
