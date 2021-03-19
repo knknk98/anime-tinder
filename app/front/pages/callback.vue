@@ -1,13 +1,20 @@
 <template>
-  <v-row justify="center" align="center">
-    Redirecting Home...
-  </v-row>
+  <Loading v-show="loading"></Loading>
 </template>
 
 <script>
 import axios from 'axios';
+import Loading from '@/components/Loading';
 
 export default {
+  components: {
+    Loading,
+  },
+  data() {
+    return {
+      loading: true,
+    }
+  },
   head() {
     return {
       title: '',
@@ -21,7 +28,7 @@ export default {
       this.$store.commit('setAuthUser', res.data.sessionId);
       this.$store.commit('setUserName', res.data.username);
       this.$store.commit('setUserImage', res.data.profile_image_url);
-
+      this.loading = false;
       this.$router.push('/');
     }).catch(err => {
     });
