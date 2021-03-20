@@ -11,6 +11,7 @@ from src.settings import ENV_VALUES
 from src.utils import img_encode
 from sqlalchemy import desc, asc
 import numpy as np
+from typing import List
 
 # https://qiita.com/AndanteSysDes/items/a25acc1523fa674e7eda
 # https://qiita.com/shirakiya/items/0114d51e9c189658002e
@@ -283,13 +284,16 @@ def create_app():
         cos_sim_mat = cos_sim_mat - np.diag(cos_sim_mat, k=0)
         return cos_sim_mat
 
-    def collaborative_filtering(ith_anime: int) -> int:
+    def collaborative_filtering(ith_anime: int, liked_anime_list: List[int]) -> int:
         """
         i 番目のアニメに対して、コサイン類似度ベースの協調フィルタリングでレコメンドされたアニメのid を返します。
+        既にlike 済みのアニメは無視します。
         """
         cos_sim_mat = anime_similarity()
-        ret = np.argmax(cos_sim_mat[ith_anime])
-        return ret
+        recommend_vec = cos_sim_mat[ith_anime]
+        recommend_vec[liked_anime_list] = 0
+        recommend_id = np.argmax(recommend_vec)
+        return recommend_id
 
     # likeunlikeステータスを受け取り、過去の情報をもとにおすすめの情報を返す.
     # [POST] : {"sessionID": セッションID, "animes": [{"animeId": string, "like", int}, ...]}
