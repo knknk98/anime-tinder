@@ -2,6 +2,9 @@
   "CaptionBox": {
     "description": "Auto imported from components/CaptionBox.vue"
   },
+  "Loading": {
+    "description": "Auto imported from components/Loading.vue"
+  },
   "LoginButton": {
     "description": "Auto imported from components/LoginButton.vue"
   },
