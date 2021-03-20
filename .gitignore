@@ -132,5 +132,7 @@ node_modules
 .DS_Store
 .env
 mysql/mysql_data/*
+app/front.nuxt/
+collecting_content/download
 .nuxt/
 src/figures
