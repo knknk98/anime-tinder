@@ -26,7 +26,7 @@
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
-    <v-list-item dark class="horizontal-gradient" id="nav-logout" :class="{ isOpen }" v-on:click="logout">
+    <v-list-item dark class="horizontal-gradient-reverse" id="nav-logout" :class="{ isOpen }" v-on:click="logout">
       <v-list-item-content>
         <v-list-item-title>
           <h3 class="nav-icon-line">Logout</h3>
