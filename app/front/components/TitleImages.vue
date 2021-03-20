@@ -8,26 +8,12 @@
     interval=3000
   >
     <v-carousel-item
-      v-for="(slide, i) in slides"
+      v-for="(image_src,i) in image_srcs"
       :key="i"
       transition="fade-transition"
     >
-      <v-sheet
-        :color="colors[i]"
-        height="100%"
-        width = "100%"
-        tile
-      >
-        <v-row
-          class="fill-height"
-          align="center"
-          justify="center"
-        >
-          <div class="display-3">
-            {{ slide }} Slide
-          </div>
-        </v-row>
-      </v-sheet>
+    <v-img :src="image_src"></v-img>
+
     </v-carousel-item>
   </v-carousel>
 </template>
@@ -36,20 +22,11 @@
   export default {
     data () {
       return {
-        colors: [
-          'indigo',
-          'warning',
-          'pink darken-2',
-          'red lighten-1',
-          'deep-purple accent-4',
-        ],
-        slides: [
-          'First',
-          'Second',
-          'Third',
-          'Fourth',
-          'Fifth',
-        ],
+        image_srcs: [
+            require("@/assets/image/title1.png"),
+            require("@/assets/image/title2.png"),
+            require("@/assets/image/title3.png"),
+        ]
       }
     },
   }
