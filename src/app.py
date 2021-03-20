@@ -319,9 +319,9 @@ def create_app():
             }
             return jsonify(response_data)
         else:
-            return redirect("http://127.0.0.1:3000")
+            return redirect(ENV_VALUES['APP_URL'])
 
-    @app.route("/test")
+    # @app.route("/test")
     def user_anime_matrix():
         # todo: user_idとanime_idを縦横にもち値がstatusの二次元配列を返す
         all_users = User.query.all()
