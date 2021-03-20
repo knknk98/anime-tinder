@@ -3,12 +3,11 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Environment variable
   publicRuntimeConfig: {
-    baseURL: process.env.BASE_URL || 'http://127.0.0.1:3000'
+    appURL: process.env.APP_URL || 'http://127.0.0.1:3000',
+    serverURL: process.env.SERVER_URL || 'http://localhost:5000',
   },
 
   privateRuntimeConfig: {
-    consumerKey: process.env.CONSUMER_KEY,
-    consumerSecret: process.env.CONSUMER_SECRET
   },
 
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -18,8 +17,8 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - front',
-    title: 'front',
+    //title: process.env.npm_package_name || '',
+    titleTemplate:  '%sタイトル | オタクとアニメのマッチングサービス',
     htmlAttrs: {
       lang: 'en'
     },

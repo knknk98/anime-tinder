@@ -1,7 +1,9 @@
 <template>
   <v-app >
     <v-main>
-      <NavSideBar/>
+        <div v-if="$route.name == 'index' || $route.name.includes('result')">
+          <NavSideBar/>
+        </div>
       <v-container>
         <nuxt />
       </v-container>
@@ -14,6 +16,8 @@ import NavSideBar from '~/components/NavSideBar.vue'
 export default {
   components: {
     NavSideBar,
+  },
+  mounted(){
   }
 }
 </script>

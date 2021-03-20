@@ -1,0 +1,35 @@
+#nav-user {
+    width: 100%;
+    position: fixed;
+    z-index: 100;
+    display: block;
+}
+
+#nav-logout {
+    width: 100%;
+    position: absolute;
+    z-index: 90;
+}
+
+.nav-icon-line {
+    display: inline;
+    border-radius: 50%;
+    vertical-align: middle;
+    width: 32px;
+}
+
+#recent-title{
+    margin-top: 4em;
+    display: block;
+}
+
+.isOpen {
+    display: block;
+    top: 6%;
+}
+
+/* 横並びに等分 */
+.double-list {
+  width: 45.00%;
+//   margin-right: 2.88%;
+}

@@ -1,9 +1,14 @@
+.home-background {
+    background: $main-background;
+    margin: -1%
+}
+
 .button-right{
     margin: 0 0 0 auto;
 }
 
 .horizontal-gradient {
-    background: linear-gradient(to right, $main-pink, $main-orange);
+    background: linear-gradient(to right, $main-orange, $main-pink);
     color: white;
 }
 
@@ -11,5 +16,4 @@
 .box {
     width: 100vw;
     height: 100vh;
-    background: #E5E5E5;
 }
