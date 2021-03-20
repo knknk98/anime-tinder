@@ -361,16 +361,18 @@ def create_app():
 
             # テストするときはパラメータが無いので他で適当にfilter
             # user = User.query.filter(User.session_id==session_id).first()
-            user = User.query.filter(User.name == "littleaikawa").first()
+            user = User.query.filter(User.name == "Kw_I_KU").first()
             if user is not None:
                 for ul_data in all_ul_data:
                     # like_unlikeの登録をする. 過去に同じuserとanime_idに対して登録があれば, それを更新する.
                     post_ul = LikeUnlike.query.\
                         filter(LikeUnlike.user_id == user.user_id).\
                         filter(LikeUnlike.anime_id == ul_data[0]).first()
-                    if post_ul is None:
+                    if post_ul is not None:
+                        # 過去に登録されたものがあれば更新
                         post_ul.status = ul_data[1]
                     else:
+                        # Noneなら追加
                         like_unlike = LikeUnlike(
                             user_id=user.user_id,
                             anime_id=ul_data[0],
