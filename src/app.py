@@ -117,7 +117,7 @@ def create_app():
     def get_twitter_request_token():
         try:
             # リクエストトークンを取得し, 認証urlを取得してリダイレクトする. 失敗したらトップページへのリンクを提示する.
-            oauth_callback = "http://127.0.0.1:3000/callback"
+            oauth_callback = ENV_VALUES['APP_URL']+"/callback"
             twitter = OAuth1Session(consumer_api_key, consumer_secret_key)
             twitter.fetch_request_token(request_token_url)
             auth_url = twitter.authorization_url(authorization_url)
@@ -201,7 +201,7 @@ def create_app():
         #session.pop('oauth_token', None)
         #session.pop('oauth_secret', None)
         #return redirect(url_for('login_test'))
-        return redirect('http://127.0.0.1:3000')
+        return redirect(ENV_VALUES['APP_URL'])
 
     @app.route('/user/user_delete')
     def logout_and_delete():
