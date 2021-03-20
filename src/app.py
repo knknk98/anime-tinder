@@ -29,7 +29,7 @@ def create_app():
     request_token_url = "https://api.twitter.com/oauth/request_token"
     authorization_url = "https://api.twitter.com/oauth/authorize"
     access_token_url = "https://api.twitter.com/oauth/access_token"
-    url = "https://api.twitter.com/1.1/statuses/user_timeline.json"
+    get_timeline_url = "https://api.twitter.com/1.1/statuses/user_timeline.json"
 
     app = Flask(__name__)
     app.config.from_object("src.config.Config")  # configを別ファイルのオブジェクトから読み込む
@@ -203,20 +203,14 @@ def create_app():
         session_id = request.args.get("sessionID")
         user = User.query.filter(User.session_id == session_id).first()
         # テスト用に定数設定してセッション関係なくするときのやつ
-        # image_num = '4'
-        # user = User.query.filter(User.name == "Kw_I_KU").first()
+        image_num = '5'
+        user = User.query.filter(User.name == "Kw_I_KU").first()
         if user is not None:
             # todo : usersテーブルに直近の結果を持たせ、そこからとってくる.
             # likeunlikeの日付データを見て一番新しいやつを持ってくれば良い.
             # LikeUnlikeとAnimeDataをanime_idでjoinして, user_idを指定して時刻順にとってきて数の上限を設定する.
-            '''
-            joined_data = db.session.query(LikeUnlike, AnimeData).\
-                        join(LikeUnlike, AnimeData.anime_id == LikeUnlike.anime_id).\
-                        filter(LikeUnlike.user_id == user.user_id).\
-                        order_by(desc(LikeUnlike.updated_at)).\
-                        limit(int(image_num)).all()
-            '''
-            past_data = db.session.query(Recommended).\
+            past_data = db.session.query(Recommended, AnimeData).\
+                        join(Recommended, AnimeData.anime_id == Recommended.anime_id).\
                         filter(Recommended.user_id == user.user_id).\
                         order_by(desc(Recommended.updated_at)).\
                         limit(int(image_num)).all()
@@ -225,11 +219,15 @@ def create_app():
             else:
                 # 各データのimageプロパティから画像をbase64でエンコードしたものを辞書にして返す.
                 response_data = {
-                                    'animeImages': [
-                                        img_encode(data.image) for data in past_data
+                                    'animes': [
+                                        {
+                                            "image": img_encode(data[1].image),
+                                            "id": data[0].anime_id,
+                                        }
+                                        for data in past_data
                                     ]
                                 }
-            # print([data.image for data in past_data])
+            # print([data[0].image for data in past_data])
             return jsonify(response_data)
         else:
             return redirect(ENV_VALUES['APP_URL'])
@@ -241,7 +239,7 @@ def create_app():
         session_id = request.args.get("sessionID")
         # テストするときはパラメータが無いので他で適当にfilter
         # user = User.query.filter(User.session_id==session_id).first()
-        image_num = "4"
+        image_num = "5"
         user = User.query.filter(User.name == "Kw_I_KU").first()
         if user is not None:
             # todo usersテーブルに, 過去に表示したことのあるものをため込むカラムを作る. そこに入っていないものからランダムに選択する.
@@ -268,7 +266,7 @@ def create_app():
                         "image": img_encode(anime.image),
                         "description": anime.description,
                         "year": anime.year,
-                        "genre": anime.genre,
+                        "genre": anime.genre.split(),
                         "company": anime.company,
                     }
                     for anime in animes
@@ -405,7 +403,7 @@ def create_app():
                             "image": img_encode(anime.image),
                             "description": anime.description,
                             "year": anime.year,
-                            "genre": anime.genre,
+                            "genre": anime.genre.split(),
                             "company": anime.company,
                         }
                     ]
