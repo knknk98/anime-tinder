@@ -140,14 +140,16 @@ def create_app():
         return redirect(ENV_VALUES['APP_URL'])
 
     # recommendされた最近のアニメを取得する
+    # [GET] : "num": intに変換可能なstring, "sessionID": セッションID
+    # {'animes': [ {"image": base64(string), "id": int}]} が返る
     @app.route("/user/recent", methods=["GET"])
     def fetch_recent_user_data():
         image_num = request.args.get("num")
         session_id = request.args.get("sessionID")
         user = User.query.filter(User.session_id == session_id).first()
         # テスト用に定数設定してセッション関係なくするときのやつ
-        image_num = '5'
-        user = User.query.filter(User.name == "Kw_I_KU").first()
+        # image_num = '5'
+        # user = User.query.filter(User.name == "Kw_I_KU").first()
         if user is not None:
             # recommendedの日付データを見て新しい順に持ってくれば良い.
             # recommendedとAnimeDataをanime_idでjoinして, user_idを指定して時刻順にとってきて数の上限を設定する.
@@ -174,14 +176,29 @@ def create_app():
             return redirect(ENV_VALUES['APP_URL'])
 
     # 指定した数(num)だけカードに表示するアニメの情報を取ってくる。DBにアクセスし、過去に表示したカード以外から適当に選んでくる。
+    # [GET] : "num": intに変換可能なstring, "sessionID": セッションID
+    # {
+    #    'animes': [
+    #        {
+    #           "id": int,
+    #           "title": string,
+    #           "image": base64(string),
+    #           "description",
+    #           "id": anime_id,
+    #           "genre": [string, string, ...]
+    #           "company": string
+    #        }
+    #    ]
+    # }
+    # が返る
     @app.route("/app/recs", methods=["GET"])
     def fetch_random_anime_data():
         image_num = request.args.get("num")
         session_id = request.args.get("sessionID")
         # テストするときはパラメータが無いので他で適当にfilter
         user = User.query.filter(User.session_id == session_id).first()
-        image_num = "5"
-        user = User.query.filter(User.name == "Kw_I_KU").first()
+        # image_num = "5"
+        # user = User.query.filter(User.name == "Kw_I_KU").first()
         if user is not None:
             lu_data = (
                 db.session.query(LikeUnlike)
@@ -214,9 +231,8 @@ def create_app():
         else:
             return redirect(ENV_VALUES['APP_URL'])
 
-    # @app.route("/test")
     def user_anime_matrix():
-        # todo: user_idとanime_idを縦横にもち値がstatusの二次元配列を返す
+        # user_idとanime_idを縦横にもち値がstatusの二次元配列を返す
         all_users = User.query.all()
         anime_num = len(AnimeData.query.all())
         user_id_list = [user.user_id for user in all_users]
@@ -275,23 +291,36 @@ def create_app():
         ret = np.argmax(cos_sim_mat[ith_anime])
         return ret
 
+    # likeunlikeステータスを受け取り、過去の情報をもとにおすすめの情報を返す.
+    # [POST] : {"sessionID": セッションID, "animes": [{"animeId": string, "like", int}, ...]}
+    # {
+    #    'animes': [
+    #        {
+    #           "id": int,
+    #           "title": string,
+    #           "image": base64(string),
+    #           "description",
+    #           "id": anime_id,
+    #           "genre": [string, string, ...]
+    #           "company": string
+    #        }
+    #    ]
+    # }
+    # が返る
     @app.route('/app/rslts', methods=['POST'])
     def anime_results():
         if request.method == "POST":
-            # likeunlikeステータスを受け取り、過去の情報をもとにおすすめの情報を返す.
-            # 今度はpostで受け取り, データを展開しておく
             # テスト用クエリ（これをターミナルで打ち込むとpostでjsonが送信されます. データベースにも反映されるはずです）
-            # curl http://localhost:5000/app/rslts -X POST -H "Content-Type: application/json" --data '{"sessionID": "value", "RequestBody": [{"animeId": "4", "like": "0"}, {"animeId": "5", "like": "2"}]}'
+            # curl http://localhost:5000/app/rslts -X POST -H "Content-Type: application/json" --data '{"sessionID": "value", "animes": [{"animeId": "4", "like": "0"}, {"animeId": "5", "like": "2"}]}'
 
             session_id = request.json['sessionID']
-            request_body = request.json['RequestBody']
+            request_body = request.json['animes']
             # 送られてきたアニメidとstatusのリストを並べた二次元リストに展開しておく.
             all_ul_data = [[int(anime['animeId']), int(anime['like'])] for anime in request_body]
-            print(all_ul_data)
 
             # テストするときはパラメータが無いので他で適当にfilter
-            # user = User.query.filter(User.session_id==session_id).first()
-            user = User.query.filter(User.name == "Kw_I_KU").first()
+            user = User.query.filter(User.session_id==session_id).first()
+            # user = User.query.filter(User.name == "Kw_I_KU").first()
             if user is not None:
                 try:
                     for ul_data in all_ul_data:
