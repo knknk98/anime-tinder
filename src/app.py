@@ -197,6 +197,7 @@ def create_app():
         # session.pop('oauth_secret', None)
         return "logout successed and user data deleted"
 
+    # recommendされた最近のアニメを取得する
     @app.route("/user/recent", methods=["GET"])
     def fetch_recent_user_data():
         image_num = request.args.get("num")
@@ -206,9 +207,8 @@ def create_app():
         image_num = '5'
         user = User.query.filter(User.name == "Kw_I_KU").first()
         if user is not None:
-            # todo : usersテーブルに直近の結果を持たせ、そこからとってくる.
-            # likeunlikeの日付データを見て一番新しいやつを持ってくれば良い.
-            # LikeUnlikeとAnimeDataをanime_idでjoinして, user_idを指定して時刻順にとってきて数の上限を設定する.
+            # recommendedの日付データを見て新しい順に持ってくれば良い.
+            # recommendedとAnimeDataをanime_idでjoinして, user_idを指定して時刻順にとってきて数の上限を設定する.
             past_data = db.session.query(Recommended, AnimeData).\
                         join(Recommended, AnimeData.anime_id == Recommended.anime_id).\
                         filter(Recommended.user_id == user.user_id).\
