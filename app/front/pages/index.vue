@@ -3,8 +3,8 @@
     <Loading v-show="loading"></Loading>
     <div class="box home-background" v-show="!loading">
       <VueTinder
-        key-name="id" 
-        :queue.sync="animequeue" 
+        key-name="id"
+        :queue.sync="animequeue"
         @submit="onSort"
         ref="tinder"
       >
@@ -41,7 +41,7 @@ import ResultButton from '@/components/ResultButton';
 import VueTinder from 'vue-tinder';
 
 export default {
-  middleware: 'authenticated',
+  //middleware: 'authenticated',
   components: {
     Loading,
     NopeButton,
@@ -78,7 +78,7 @@ export default {
       // カードをめくる(onSortをよぶ)
       this.$refs.tinder.decide(choice);
     },
-  
+
     // フリック
     onSort: function (choice) {
       const id = this.animequeue[0].id;
