@@ -29,6 +29,7 @@ def create_app():
     request_token_url = "https://api.twitter.com/oauth/request_token"
     authorization_url = "https://api.twitter.com/oauth/authorize"
     access_token_url = "https://api.twitter.com/oauth/access_token"
+    url = "https://api.twitter.com/1.1/statuses/user_timeline.json"
 
     app = Flask(__name__)
     app.config.from_object("src.config.Config")  # configを別ファイルのオブジェクトから読み込む
@@ -64,58 +65,6 @@ def create_app():
             )
         else:
             return """ログインしてください.<a href="/login">ログインページ</a>"""
-
-    """
-    @app.route('/add')
-    def add_user():
-        #user = User(name='name', email='test@test.com')
-        user = User(name='name')
-        db.session.add(user)
-        db.session.commit()
-        return 'ユーザーを増やしました'
-
-    @app.route('/delete')
-    def delete_user():
-        user = User.query.first()
-        if user is not None:
-            db.session.delete(user)
-            db.session.commit()
-            return 'ユーザーを減らしました'
-        else:
-            return 'ユーザーはひとりもいません'
-    """
-    """
-    @app.route('/login', methods=['POST', 'GET'])
-    def login_test():
-        if request.method == 'POST':
-            name = request.form['user_name']
-            #email = request.form['email']
-            # user情報を確認
-            #the_user = User.query.filter(User.email==email).all()
-            the_user = User.query.filter(User.name==name).all()
-            print(the_user)
-            if len(the_user) == 0:
-                # 存在しないなら登録処理
-                #user = User(name=name, email=email)
-                user = User(name=name)
-                db.session.add(user)
-                db.session.commit()
-            else:
-                # 存在するならOK（emailはユニークなので）
-                name = the_user[0].name
-
-            # セッション変数の設定
-            session['user_name'] = name
-            return redirect(url_for('index'))
-        else:
-            return
-                    <form method="post">
-                        <p><input type=text name=user_name required>
-                        <!--<p><input type=text name=email required>-->
-                        <p><input type=submit value=login>
-                    </form>
-
-    """
 
     # 認証画面を返す
     @app.route("/user/login", methods=["GET"])
