@@ -1,5 +1,64 @@
 <template>
   <div>
+
+
+    <v-dialog
+      v-model="dialog"
+      max-width="380"
+    >
+      <v-card>
+        <v-list disabled>
+          <v-subheader>
+            画像をスワイプするかボタンを押してね！
+          </v-subheader>
+          <v-list-item-group
+            color="primary"
+          >
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon id="like-gradient">mdi-circle-outline</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>LIKE/すき😸</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon id="superlike-gradient">mdi-heart</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>SUPERLIKE/だいすき😻</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon id="nope-gradient">mdi-close</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>NOPE/きらい😾</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon color="red">mdi-arrow-right-thick</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>結果をみる🏃‍♀️</v-list-item-title>
+                <v-list-item-subtitle>好きなタイミングで押してね！</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+
+
+          </v-list-item-group>
+        </v-list>
+      </v-card>
+    </v-dialog>
+
+
+
     <Loading v-show="loading"></Loading>
     <div class="box home-background" v-show="!loading">
       <VueTinder
@@ -58,6 +117,7 @@ export default {
       // 仕分けされたアニメ
       animesorted: [],
       loading: false,
+      dialog: true,
     }
   },
   head() {
