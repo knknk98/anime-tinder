@@ -12,6 +12,11 @@
     color: white;
 }
 
+
+.horizontal-gradient-reverse {
+    background: linear-gradient(to left, $main-orange, $main-pink);
+    color: white;
+}
 // 全画面
 .box {
     width: 100vw;
