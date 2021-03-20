@@ -20,6 +20,11 @@ import axios from 'axios';
 
 export default {
   middleware: 'authenticated',
+  data() {
+    return {
+      name: 'index',
+    }
+  },
   head() {
     return {
       title: '',
