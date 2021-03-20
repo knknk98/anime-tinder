@@ -2,6 +2,13 @@
     width: 100%;
     position: fixed;
     z-index: 100;
+    display: block;
+}
+
+#nav-logout {
+    width: 100%;
+    position: absolute;
+    z-index: 90;
 }
 
 .nav-icon-line {
@@ -16,11 +23,13 @@
     display: block;
 }
 
-.dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
+.isOpen {
     display: block;
-    padding: 0;
-    list-style-type: none;
+    top: 6.5%;
+}
+
+/* 横並びに等分 */
+.double-list {
+  width: 45.00%;
+//   margin-right: 2.88%;
 }

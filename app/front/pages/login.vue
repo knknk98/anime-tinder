@@ -3,7 +3,7 @@
     <div id="login-gridA">
       <div class="block-box">
         <h1>タイトル</h1>
-        <h2 class="catchcopy">オタクは急展開する。アニメひとつで。</h2>
+        <h2 class="catchcopy">オタクは急展開する。<br>アニメひとつで。</h2>
         <br><br>
         <LoginButton/>
       </div>
