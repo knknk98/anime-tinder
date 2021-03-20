@@ -176,7 +176,6 @@ def create_app():
             db.session.commit()
         # session.pop('oauth_token', None)
         # session.pop('oauth_secret', None)
-        # return redirect(url_for('login_test'))
         return redirect("http://127.0.0.1:3000")
 
     @app.route("/user/user_delete")
