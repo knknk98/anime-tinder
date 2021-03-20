@@ -10,7 +10,9 @@
     vertical-align: middle;
 }
 
-#recent-title{
-    margin-top: 4em;
+#buttons{
+    position: absolute;
     display: block;
+    padding: 3% 0;
+    bottom: 0; /*下に固定*/
 }
