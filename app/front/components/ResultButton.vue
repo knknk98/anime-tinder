@@ -1,8 +1,9 @@
 <template>
   <v-btn
-    class="mx-2"
+    class="mx-2 button-orange"
     fab
     small
+    color="red"
     @click="result"
   >
     <v-icon id="submit-gradient">

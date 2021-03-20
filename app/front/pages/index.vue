@@ -10,9 +10,9 @@
       >
         <div
           slot-scope="scope"
-          class="pic"
-          :style="{ 
-            'background-image': `url(${scope.data.image})`
+          class="pic vertical-gradient"
+          :style="{
+            'background-image': `url(${scope.data.image})`,
           }"
         >
           <h2 id="tinder-title">{{scope.data.title}}</h2>
