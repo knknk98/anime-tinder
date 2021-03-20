@@ -5,6 +5,9 @@
   "CaptionBox": {
     "description": "Auto imported from components/CaptionBox.vue"
   },
+  "LikeButton": {
+    "description": "Auto imported from components/LikeButton.vue"
+  },
   "Loading": {
     "description": "Auto imported from components/Loading.vue"
   },
@@ -14,8 +17,17 @@
   "NavSideBar": {
     "description": "Auto imported from components/NavSideBar.vue"
   },
+  "NopeButton": {
+    "description": "Auto imported from components/NopeButton.vue"
+  },
+  "ResultButton": {
+    "description": "Auto imported from components/ResultButton.vue"
+  },
   "SNSShareButton": {
     "description": "Auto imported from components/SNSShareButton.vue"
+  },
+  "SuperLikeButton": {
+    "description": "Auto imported from components/SuperLikeButton.vue"
   },
   "TheResultAnimeInfo": {
     "description": "Auto imported from components/TheResultAnimeInfo.vue"

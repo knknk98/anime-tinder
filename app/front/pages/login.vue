@@ -18,7 +18,6 @@
 import LoginButton from '~/components/LoginButton.vue'
 import TitleImages from '~/components/TitleImages.vue'
 export default {
-  // middleware: 'authenticated',
   components: {
     LoginButton,
     TitleImages,

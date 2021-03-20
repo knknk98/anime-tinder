@@ -10,7 +10,64 @@
     vertical-align: middle;
 }
 
-#recent-title{
-    margin-top: 4em;
-    display: block;
+#buttons{
+    position: absolute;
+    display: inline;
+    padding: 3% 0;
+    bottom: 0; /*下に固定*/
+}
+
+.vue-tinder {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: 10px;
+    margin: auto;
+
+    width: calc(80%);
+    height: calc(70%);
+
+    min-width: 300px;
+    max-width: 355px;
+}
+
+.pic {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+}
+
+#tinder-title{
+    display:inline;
+    position: relative;
+    color: white;
+    font-size: 36px;
+    left: 5%;
+    right: 0;
+    top: 80%;
+}
+
+#tinder-year{
+    display:inline;
+    position: relative;
+    color: white;
+    font-size: 24px;
+    left: 5%;
+    right: 0;
+    top: 80%;
+}
+
+#tinder-genre{
+    display:inline;
+    position: relative;
+    color: white;
+    font-size: 24px;
+    left: 5%;
+    right: 0;
+    top: 80%;
+}
+
+.vertical-gradient {
+    opacity: 0.9;
 }

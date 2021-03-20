@@ -8,7 +8,7 @@
 }
 
 .horizontal-gradient {
-    background: linear-gradient(to right, $main-orange, $main-pink);
+    background: linear-gradient(to right, $main-pink, $main-orange);
     color: white;
 }
 
@@ -21,4 +21,6 @@
 .box {
     width: 100vw;
     height: 100vh;
+    display: flex;
+    justify-content: center;
 }
