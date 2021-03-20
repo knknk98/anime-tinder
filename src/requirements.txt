@@ -11,3 +11,9 @@ gunicorn
 python-dotenv
 requests_oauthlib
 flask-cors
+<<<<<<< HEAD
+bs4
+logzero
+requests
+=======
+>>>>>>> b84bb0ddcccf3dc747b11d0a211b68b392d529a8
