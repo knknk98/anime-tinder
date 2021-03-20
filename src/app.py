@@ -15,6 +15,8 @@ from src.settings import ENV_VALUES
 from src.utils import img_encode
 from sqlalchemy import desc, asc
 
+import numpy as np
+
 # https://qiita.com/AndanteSysDes/items/a25acc1523fa674e7eda
 # https://qiita.com/shirakiya/items/0114d51e9c189658002e
 # https://qiita.com/kai_kou/items/5d73de21818d1d582f00
@@ -364,6 +366,26 @@ def create_app():
         # return jsonify(res) # 確認用
         # アニメID順にステータスが並んだリストがユーザーごとに並んでいる二次元リストを返す.
         return res
+
+    def anime_similarity():
+        content_lu = np.array(user_anime_matrix()).T
+        # anime_num, user_num = content_lu.shape[0], content_lu.shape[1]
+        corr_mat = np.dot(content_lu, content_lu.T)
+        anime_norm_mat = np.outer(np.linalg.norm(content_lu, axis=1))
+        anime_norm_mat = np.where(
+            np.absolute(anime_norm_mat) < 0.001, anime_norm_mat, 1
+        )
+        cos_sim_mat = corr_mat / anime_norm_mat
+        cos_sim_mat = cos_sim_mat - np.diag(cos_sim_mat, k=0)
+        return cos_sim_mat
+
+    def collaborative_filtering(ith_anime: int) -> int:
+        """
+        i 番目のアニメに対して、コサイン類似度ベースの協調フィルタリングでレコメンドされたアニメのid を返します。
+        """
+        cos_sim_mat = anime_similarity()
+        ret = np.argmax(cos_sim_mat[ith_anime])
+        return ret
 
     """
     @app.route('/test')
