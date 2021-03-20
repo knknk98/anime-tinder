@@ -5,7 +5,7 @@ import json
 import hashlib
 import re
 from src.database import init_db, db
-from src.models import User, LikeUnlike, AnimeData
+from src.models import User, LikeUnlike, AnimeData, Recommended
 from requests_oauthlib import OAuth1Session
 from urllib.parse import parse_qsl
 from flask_cors import CORS
@@ -255,24 +255,32 @@ def create_app():
         user = User.query.filter(User.session_id == session_id).first()
         # テスト用に定数設定してセッション関係なくするときのやつ
         # image_num = '4'
-        # user = User.query.filter(User.name == "littleaikawa").first()
+        # user = User.query.filter(User.name == "Kw_I_KU").first()
         if user is not None:
             # todo : usersテーブルに直近の結果を持たせ、そこからとってくる.
             # likeunlikeの日付データを見て一番新しいやつを持ってくれば良い.
             # LikeUnlikeとAnimeDataをanime_idでjoinして, user_idを指定して時刻順にとってきて数の上限を設定する.
+            '''
             joined_data = db.session.query(LikeUnlike, AnimeData).\
                         join(LikeUnlike, AnimeData.anime_id == LikeUnlike.anime_id).\
                         filter(LikeUnlike.user_id == user.user_id).\
                         order_by(desc(LikeUnlike.updated_at)).\
                         limit(int(image_num)).all()
-            # 各joinされたデータの二つ目がAnimeDataなので,
-            # そのimageプロパティから画像をbase64でエンコードしたものを辞書にして返す.
-            response_data = {
-                                'animeImages': [
-                                    img_encode(data[1].image) for data in joined_data
-                                ]
-                            }
-            # print([data[1].image for data in joined_data])
+            '''
+            past_data = db.session.query(Recommended).\
+                        filter(Recommended.user_id == user.user_id).\
+                        order_by(desc(Recommended.updated_at)).\
+                        limit(int(image_num)).all()
+            if past_data is None:
+                response_data = {'animeImages': []}
+            else:
+                # 各データのimageプロパティから画像をbase64でエンコードしたものを辞書にして返す.
+                response_data = {
+                                    'animeImages': [
+                                        img_encode(data.image) for data in past_data
+                                    ]
+                                }
+            # print([data.image for data in past_data])
             return jsonify(response_data)
         else:
             return redirect(ENV_VALUES['APP_URL'])
@@ -432,6 +440,13 @@ def create_app():
                     .filter(AnimeData.anime_id == recommend)
                     .first()
                 )
+                # recommendedに登録する
+                recommended_anime = Recommended(
+                    user_id=user.user_id,
+                    anime_id=recommend
+                )
+                db.session.add(recommended_anime)
+                db.session.commit()
                 response_data = {
                     "animes":
                     [
