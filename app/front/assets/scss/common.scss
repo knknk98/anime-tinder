@@ -20,8 +20,11 @@
 
 // 全画面
 .box {
-    width: 100vw;
+    width: 120vw;
     height: 100vh;
     display: flex;
     justify-content: center;
+    margin-top: -60px;
+    margin-left: -50px;
+
 }

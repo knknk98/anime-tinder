@@ -4,7 +4,7 @@
     <div class="box home-background" v-show="!loading">
       <VueTinder
         key-name="id"
-        :queue.sync="animequeue" 
+        :queue.sync="animequeue"
         @submit="onSort"
         ref="tinder"
       >
@@ -41,7 +41,7 @@ import ResultButton from '@/components/ResultButton';
 import VueTinder from 'vue-tinder';
 
 export default {
-  middleware: 'authenticated',
+  //middleware: 'authenticated',
   components: {
     Loading,
     NopeButton,
