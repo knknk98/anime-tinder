@@ -360,9 +360,8 @@ def create_app():
                         filter(LikeUnlike.user_id == user.user_id).all()
                     past_ul_list = [data.anime_id - 1 for data in past_ul_data]
 
-                    # 今はリストのargが返ってくるので+1してアニメidに直す. 修正するかも
-                    recommend = collaborative_filtering(like_anime_id) + 1
-                    # recommend = collaborative_filtering(like_anime_id, past_ul_list) + 1
+                    # 今はリストのargが返ってくるので+1してアニメidに直す.
+                    recommend = collaborative_filtering(like_anime_id, past_ul_list) + 1
 
                     # recommendがidなので、その情報を返す. 一つだけとってくる
                     anime = (
