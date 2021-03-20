@@ -1,4 +1,7 @@
 {
+  "AppBar": {
+    "description": "Auto imported from components/AppBar.vue"
+  },
   "CaptionBox": {
     "description": "Auto imported from components/CaptionBox.vue"
   },

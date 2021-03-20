@@ -1,6 +1,7 @@
 import Vue from 'vue'
 
 const components = {
+  AppBar: () => import('../../components/AppBar.vue' /* webpackChunkName: "components/app-bar" */).then(c => c.default || c),
   CaptionBox: () => import('../../components/CaptionBox.vue' /* webpackChunkName: "components/caption-box" */).then(c => c.default || c),
   Loading: () => import('../../components/Loading.vue' /* webpackChunkName: "components/loading" */).then(c => c.default || c),
   LoginButton: () => import('../../components/LoginButton.vue' /* webpackChunkName: "components/login-button" */).then(c => c.default || c),
