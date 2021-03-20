@@ -2,6 +2,7 @@ export const state = () => ({
   authUser: null,
   userName: null,
   userImage: null,
+  accessed: true,
 });
 
 export const mutations = {
@@ -13,5 +14,8 @@ export const mutations = {
   },
   setUserImage(state, userImage) {
     state.userImage = userImage;
+  },
+  setAccessed(state, accessed) {
+    state.accessed = accessed;
   },
 };

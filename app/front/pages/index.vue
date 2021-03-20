@@ -50,8 +50,6 @@
                 <v-list-item-subtitle>好きなタイミングで押してね！</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
-
-
           </v-list-item-group>
         </v-list>
       </v-card>
@@ -117,7 +115,7 @@ export default {
       // 仕分けされたアニメ
       animesorted: [],
       loading: false,
-      dialog: true,
+      dialog: this.$store.state.accessed,
     }
   },
   head() {
@@ -128,6 +126,7 @@ export default {
   // 最初5件を取得
   mounted () {
     this.getData();
+    this.$store.commit('setAccessed', false);
   },
   methods: {
     // 0:NOPE,1:LIKE,2:SUPERLIKE
