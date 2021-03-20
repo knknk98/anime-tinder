@@ -8,6 +8,6 @@ def img_encode(img_name):
         with open(img_path, "rb") as img:
             data = base64.b64encode(img.read())
     else:
-        return 'img_name(not found)'
+        return 'not found'
 
     return data.decode('utf-8')
