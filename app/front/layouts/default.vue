@@ -1,7 +1,7 @@
 <template>
   <v-app >
     <v-main>
-        <div v-if="$route.name === ('index' || 'result')">
+        <div v-if="$route.name == 'index' || $route.name.includes('result')">
           <NavSideBar/>
         </div>
       <v-container>
