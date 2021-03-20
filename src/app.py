@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session
+from flask import Flask, request, jsonify, redirect, url_for, session
 import json
 
 # import uuid
@@ -304,17 +304,17 @@ def create_app():
             )
             response_data = {
                 "animes": [
-                {
-                    "id": anime.anime_id,
-                    "title": anime.title,
-                    #'image': anime.image, # 画像をbase64で返す仕様についてはあとで
-                    "image": img_encode(anime.image),
-                    "description": anime.description,
-                    "year": anime.year,
-                    "genre": anime.genre,
-                    "company": anime.company,
-                }
-                for anime in animes
+                    {
+                        "id": anime.anime_id,
+                        "title": anime.title,
+                        # 画像をbase64で返す
+                        "image": img_encode(anime.image),
+                        "description": anime.description,
+                        "year": anime.year,
+                        "genre": anime.genre,
+                        "company": anime.company,
+                    }
+                    for anime in animes
                 ]
             }
             return jsonify(response_data)
@@ -393,14 +393,15 @@ def create_app():
         if request.method == "POST":
             # likeunlikeステータスを受け取り、過去の情報をもとにおすすめの情報を返す.
             # 今度はpostで受け取り, データを展開しておく
-            # テスト用クエリ
+            # テスト用クエリ（これをターミナルで打ち込むとpostでjsonが送信されます. データベースにも反映されるはずです）
             # curl http://localhost:5000/app/rslts -X POST -H "Content-Type: application/json" --data '{"sessionID": "value", "RequestBody": [{"animeId": "4", "like": "0"}, {"animeId": "5", "like": "2"}]}'
 
             # application/jsonで送られている場合request.jsonで取得可能
             # https://qiita.com/naoko_s/items/04d68998cfdbe9c1b5f2
             session_id = request.json['sessionID']
             request_body = request.json['RequestBody']
-            all_ul_data = [[int(anime['animeId']),int(anime['like'])] for anime in request_body]
+            # 送られてきたアニメidとstatusのリストを並べた二次元リストに展開しておく.
+            all_ul_data = [[int(anime['animeId']), int(anime['like'])] for anime in request_body]
             print(all_ul_data)
 
             # テストするときはパラメータが無いので他で適当にfilter
@@ -408,9 +409,19 @@ def create_app():
             user = User.query.filter(User.name == "littleaikawa").first()
             if user is not None:
                 for ul_data in all_ul_data:
-                    # like_unlikeの新規登録（todo: 過去に登録したことがあったら？）
-                    like_unlike = LikeUnlike(user_id=user.user_id, anime_id=ul_data[0], status=ul_data[1])
-                    db.session.add(like_unlike)
+                    # like_unlikeの登録をする. 過去に同じuserとanime_idに対して登録があれば, それを更新する.
+                    post_ul = LikeUnlike.query.\
+                        filter(LikeUnlike.user_id == user.user_id).\
+                        filter(LikeUnlike.anime_id == ul_data[0]).first()
+                    if post_ul is None:
+                        post_ul.status = ul_data[1]
+                    else:
+                        like_unlike = LikeUnlike(
+                            user_id=user.user_id,
+                            anime_id=ul_data[0],
+                            status=ul_data[1]
+                        )
+                        db.session.add(like_unlike)
                     db.session.commit()
                 # 登録が終わったら今回受け取った情報でlike以上のものを一つ選び、レコメンドアルゴリズムに渡す.
                 like_anime_id = [anime_data[0] for anime_data in all_ul_data if anime_data[1] > 0][0]
@@ -422,18 +433,18 @@ def create_app():
                     .first()
                 )
                 response_data = {
-                    "animes": [
-                                {
-                                    "id": anime.anime_id,
-                                    "title": anime.title,
-                                    #'image': anime.image, # 画像をbase64で返す仕様についてはあとで
-                                    "image": img_encode(anime.image),
-                                    "description": anime.description,
-                                    "year": anime.year,
-                                    "genre": anime.genre,
-                                    "company": anime.company,
-                                }
-                              ]
+                    "animes":
+                    [
+                        {
+                            "id": anime.anime_id,
+                            "title": anime.title,
+                            "image": img_encode(anime.image),
+                            "description": anime.description,
+                            "year": anime.year,
+                            "genre": anime.genre,
+                            "company": anime.company,
+                        }
+                    ]
                 }
                 return jsonify(response_data)
             else:
