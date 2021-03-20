@@ -319,18 +319,18 @@ def create_app():
             all_ul_data = [[int(anime['animeId']), int(anime['like'])] for anime in request_body]
 
             # テストするときはパラメータが無いので他で適当にfilter
-            user = User.query.filter(User.session_id==session_id).first()
+            user = User.query.filter(User.session_id == session_id).first()
             # user = User.query.filter(User.name == "Kw_I_KU").first()
             if user is not None:
                 try:
                     for ul_data in all_ul_data:
                         # like_unlikeの登録をする. 過去に同じuserとanime_idに対して登録があれば, それを更新する.
-                        post_ul = LikeUnlike.query.\
+                        past_ul = LikeUnlike.query.\
                             filter(LikeUnlike.user_id == user.user_id).\
                             filter(LikeUnlike.anime_id == ul_data[0]).first()
-                        if post_ul is not None:
+                        if past_ul is not None:
                             # 過去に登録されたものがあれば更新
-                            post_ul.status = ul_data[1]
+                            past_ul.status = ul_data[1]
                         else:
                             # Noneなら追加
                             like_unlike = LikeUnlike(
@@ -341,14 +341,25 @@ def create_app():
                             db.session.add(like_unlike)
                         db.session.commit()
                     # 登録が終わったら今回受け取った情報でlike以上のものを一つ選び、レコメンドアルゴリズムに渡す.
+                    # like以上が一つでもあるならsuperlikeなものを探してそちらを優先する. なければlikeを取得, なければempty.
                     like_anime_data = [anime_data[0] for anime_data in all_ul_data if anime_data[1] > 0]
                     if len(like_anime_data) > 0:
-                        like_anime_id = like_anime_data[0]
+                        superlike_anime_data = [anime_data[0] for anime_data in all_ul_data if anime_data[1] == 2]
+                        if len(superlike_anime_data) > 0:
+                            like_anime_id = superlike_anime_data[0]
+                        else:
+                            like_anime_id = like_anime_data[0]
                     else:
                         raise Exception('like_anime_data is empty')
+                    # 今までにlike/unlikeを押したことのある全てのanime_idを取得する. 渡すとき0-indexにしたいので-1しておく.
+                    past_ul_data = LikeUnlike.query.\
+                        filter(LikeUnlike.user_id == user.user_id).all()
+                    past_ul_list = [data.anime_id - 1 for data in past_ul_data]
 
                     # 今はリストのargが返ってくるので+1してアニメidに直す. 修正するかも
                     recommend = collaborative_filtering(like_anime_id) + 1
+                    # recommend = collaborative_filtering(like_anime_id, past_ul_list) + 1
+
                     # recommendがidなので、その情報を返す. 一つだけとってくる
                     anime = (
                         db.session.query(AnimeData)
@@ -357,7 +368,7 @@ def create_app():
                     )
                     # 該当アニメがないなら例外でエラー
                     if anime is None:
-                        raise Exception('anime is None')
+                        raise Exception('anime data not found')
 
                     # recommendedに登録する
                     recommended_anime = Recommended(
