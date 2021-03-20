@@ -2,11 +2,12 @@ flask
 sqlalchemy<1.4
 flask-sqlalchemy
 sqlalchemy_utils
-flask-migrate
-flask-login
+#flask-migrate
+#flask-login
 pymysql
 gunicorn
-flask_marshmallow
-marshmallow-sqlalchemy
+#flask_marshmallow
+#marshmallow-sqlalchemy
+python-dotenv
 requests_oauthlib
 flask-cors
