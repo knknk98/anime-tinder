@@ -21,6 +21,11 @@ export default {
       TheResultAnimeInfo,
       CaptionBox,
       SNSShareButton,
-  }
+  },
+  data() {
+    return {
+      name: 'result',
+    }
+  },
 }
 </script>

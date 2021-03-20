@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       loading: true,
+      name: 'callback',
     }
   },
   head() {

@@ -51,6 +51,7 @@ import axios from 'axios';
 export default {
   data () {
     return {
+      drawer: true,
       isOpen: false,
       userImage: this.$store.state.userImage,
       items: [

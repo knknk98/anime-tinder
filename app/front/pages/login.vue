@@ -19,6 +19,11 @@ export default {
   components: {
     LoginButton
   },
+  data() {
+    return {
+      name: 'login',
+    }
+  },
   head() {
     return {
       title: 'ログイン・',
