@@ -327,7 +327,8 @@ def create_app():
         content_lu = np.array(user_anime_matrix()).T
         # anime_num, user_num = content_lu.shape[0], content_lu.shape[1]
         corr_mat = np.dot(content_lu, content_lu.T)
-        anime_norm_mat = np.outer(np.linalg.norm(content_lu, axis=1))
+        anime_norm_vec = np.linalg.norm(content_lu, axis=1)
+        anime_norm_mat = np.outer(anime_norm_vec, anime_norm_vec)
         anime_norm_mat = np.where(
             np.absolute(anime_norm_mat) < 0.001, anime_norm_mat, 1
         )
