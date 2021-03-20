@@ -12,7 +12,7 @@
           slot-scope="scope"
           class="pic vertical-gradient"
           :style="{
-            'background-image': `url(${scope.data.image})`,
+            'background-image': `data:image/jpeg;base64,${scope.data.image}`,
           }"
         >
           <h2 id="tinder-title">{{scope.data.title}}</h2>
@@ -82,6 +82,7 @@ export default {
     // フリック
     onSort: function (choice) {
       const id = this.animequeue[0].id;
+      console.log(this.animequeue[0].image);
       var res = {};
       switch (choice.type) {
         case 'nope': // 左
