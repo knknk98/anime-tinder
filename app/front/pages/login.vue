@@ -20,8 +20,12 @@ import TitleImages from '~/components/TitleImages.vue'
 export default {
   // middleware: 'authenticated',
   components: {
+<<<<<<< HEAD
     LoginButton,
     TitleImages,
+=======
+    LoginButton
+>>>>>>> 6ebd33045fd00a86fae0bb9ad89c75d4275b8b9b
   },
   data() {
     return {

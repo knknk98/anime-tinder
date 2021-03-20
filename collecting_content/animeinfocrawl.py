@@ -63,7 +63,11 @@ def main() -> None:
             logger.info(f"{title} collected!")
             count += 1
 
-    print(json.dumps(animeinfo, ensure_ascii=False))
+    filename = "animeinfo.json"
+    with open(filename, "w") as fp:
+
+        logger.info(f"...creating {filename}")
+        json.dump(animeinfo, fp, ensure_ascii=False)
 
 
 if __name__ == "__main__":

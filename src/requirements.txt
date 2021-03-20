@@ -14,3 +14,4 @@ flask-cors
 bs4
 logzero
 requests
+numpy
