@@ -309,7 +309,6 @@ def create_app():
     #           "title": string,
     #           "image": base64(string),
     #           "description",
-    #           "id": anime_id,
     #           "genre": [string, string, ...]
     #           "company": string
     #        }
