@@ -1,3 +1,4 @@
+export { default as AppBar } from '../../components/AppBar.vue'
 export { default as CaptionBox } from '../../components/CaptionBox.vue'
 export { default as LikeButton } from '../../components/LikeButton.vue'
 export { default as Loading } from '../../components/Loading.vue'
@@ -11,6 +12,7 @@ export { default as TheResultAnimeInfo } from '../../components/TheResultAnimeIn
 export { default as TheResultTextBox } from '../../components/TheResultTextBox.vue'
 export { default as TitleImages } from '../../components/TitleImages.vue'
 
+export const LazyAppBar = import('../../components/AppBar.vue' /* webpackChunkName: "components/app-bar" */).then(c => c.default || c)
 export const LazyCaptionBox = import('../../components/CaptionBox.vue' /* webpackChunkName: "components/caption-box" */).then(c => c.default || c)
 export const LazyLikeButton = import('../../components/LikeButton.vue' /* webpackChunkName: "components/like-button" */).then(c => c.default || c)
 export const LazyLoading = import('../../components/Loading.vue' /* webpackChunkName: "components/loading" */).then(c => c.default || c)
