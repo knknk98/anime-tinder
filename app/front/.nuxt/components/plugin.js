@@ -7,7 +7,8 @@ const components = {
   NavSideBar: () => import('../../components/NavSideBar.vue' /* webpackChunkName: "components/nav-side-bar" */).then(c => c.default || c),
   SNSShareButton: () => import('../../components/SNSShareButton.vue' /* webpackChunkName: "components/s-n-s-share-button" */).then(c => c.default || c),
   TheResultAnimeInfo: () => import('../../components/TheResultAnimeInfo.vue' /* webpackChunkName: "components/the-result-anime-info" */).then(c => c.default || c),
-  TheResultTextBox: () => import('../../components/TheResultTextBox.vue' /* webpackChunkName: "components/the-result-text-box" */).then(c => c.default || c)
+  TheResultTextBox: () => import('../../components/TheResultTextBox.vue' /* webpackChunkName: "components/the-result-text-box" */).then(c => c.default || c),
+  TitleImages: () => import('../../components/TitleImages.vue' /* webpackChunkName: "components/title-images" */).then(c => c.default || c)
 }
 
 for (const name in components) {

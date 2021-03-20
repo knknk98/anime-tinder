@@ -13,3 +13,4 @@ You can directly use them in pages and other components without the need to impo
 - `<SNSShareButton>` | `<s-n-s-share-button>` (components/SNSShareButton.vue)
 - `<TheResultAnimeInfo>` | `<the-result-anime-info>` (components/TheResultAnimeInfo.vue)
 - `<TheResultTextBox>` | `<the-result-text-box>` (components/TheResultTextBox.vue)
+- `<TitleImages>` | `<title-images>` (components/TitleImages.vue)

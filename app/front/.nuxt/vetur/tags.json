@@ -19,5 +19,8 @@
   },
   "TheResultTextBox": {
     "description": "Auto imported from components/TheResultTextBox.vue"
+  },
+  "TitleImages": {
+    "description": "Auto imported from components/TitleImages.vue"
   }
 }

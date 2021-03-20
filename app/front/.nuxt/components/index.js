@@ -5,6 +5,7 @@ export { default as NavSideBar } from '../../components/NavSideBar.vue'
 export { default as SNSShareButton } from '../../components/SNSShareButton.vue'
 export { default as TheResultAnimeInfo } from '../../components/TheResultAnimeInfo.vue'
 export { default as TheResultTextBox } from '../../components/TheResultTextBox.vue'
+export { default as TitleImages } from '../../components/TitleImages.vue'
 
 export const LazyCaptionBox = import('../../components/CaptionBox.vue' /* webpackChunkName: "components/caption-box" */).then(c => c.default || c)
 export const LazyLoading = import('../../components/Loading.vue' /* webpackChunkName: "components/loading" */).then(c => c.default || c)
@@ -13,3 +14,4 @@ export const LazyNavSideBar = import('../../components/NavSideBar.vue' /* webpac
 export const LazySNSShareButton = import('../../components/SNSShareButton.vue' /* webpackChunkName: "components/s-n-s-share-button" */).then(c => c.default || c)
 export const LazyTheResultAnimeInfo = import('../../components/TheResultAnimeInfo.vue' /* webpackChunkName: "components/the-result-anime-info" */).then(c => c.default || c)
 export const LazyTheResultTextBox = import('../../components/TheResultTextBox.vue' /* webpackChunkName: "components/the-result-text-box" */).then(c => c.default || c)
+export const LazyTitleImages = import('../../components/TitleImages.vue' /* webpackChunkName: "components/title-images" */).then(c => c.default || c)
