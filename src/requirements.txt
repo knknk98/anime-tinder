@@ -6,7 +6,6 @@ sqlalchemy_utils
 #flask-login
 pymysql
 gunicorn
-#flask_marshmallow
 #marshmallow-sqlalchemy
 python-dotenv
 requests_oauthlib

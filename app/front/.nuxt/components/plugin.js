@@ -11,7 +11,6 @@ const components = {
   TheResultTextBox: () => import('../../components/TheResultTextBox.vue' /* webpackChunkName: "components/the-result-text-box" */).then(c => c.default || c),
   TitleImages: () => import('../../components/TitleImages.vue' /* webpackChunkName: "components/title-images" */).then(c => c.default || c)
 }
-
 for (const name in components) {
   Vue.component(name, components[name])
   Vue.component('Lazy' + name, components[name])
