@@ -15,7 +15,6 @@
 <script>
 import LoginButton from '~/components/LoginButton.vue'
 export default {
-  // middleware: 'authenticated',
   components: {
     LoginButton
   },

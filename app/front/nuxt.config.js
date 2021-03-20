@@ -4,7 +4,7 @@ export default {
   // Environment variable
   publicRuntimeConfig: {
     appURL: process.env.APP_URL || 'http://127.0.0.1:3000',
-    serverURL: process.env.SERVER_URL || 'http://localhost:5000',
+    serverURL: process.env.SERVER_URL || 'http://127.0.0.1:5000',
   },
 
   privateRuntimeConfig: {

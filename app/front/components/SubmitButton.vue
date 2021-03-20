@@ -3,19 +3,19 @@
     class="mx-2"
     fab
     small
-    @click="superlike"
+    @click="submit"
   >
-    <v-icon id="superlike-gradient">
-      mdi-heart
+    <v-icon id="submit-gradient">
+      mdi-arrow-right-thick
     </v-icon>
   </v-btn>
 </template>
 <script>
 export default {
   methods: {
-    superlike: function(){
-      this.$emit('superlike');
-    }
+    submit: function(){
+      this.$emit('submit');
+    },
   },
 }
 </script>

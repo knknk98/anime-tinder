@@ -12,11 +12,9 @@
 </template>
 <script>
 export default {
-  data() {
-  },
   methods: {
     like: function(){
-      this.$router.push('/result');
+      this.$emit('like');
     },
   },
 }

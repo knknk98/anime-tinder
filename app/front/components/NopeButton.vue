@@ -3,6 +3,7 @@
     class="mx-2"
     fab
     small
+    @click="nope"
   >
     <v-icon id="nope-gradient">
       mdi-close
@@ -11,11 +12,9 @@
 </template>
 <script>
 export default {
-  data() {
-  },
   methods: {
     nope: function(){
-      this.$router.push('/');
+      this.$emit('nope');
     }
   },
 }
