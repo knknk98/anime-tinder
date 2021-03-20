@@ -4,7 +4,7 @@ info:
   description: サポーターズハッカソン用アニメレコメンドアプリのAPI仕様
   version: 1.0.0
 servers:
-  - url: http://localhost:5000/
+  - url: http://127.0.0.1:5000/
 
 tags:
   - name: user
@@ -33,6 +33,13 @@ paths:
       description:
         <b>「ログアウト」ボタンを押したときの処理</b><br>
         ログインAPIと同様。成功した場合、user/login/にリダイレクトさせるがこの処理はクライアント側で実装する。
+      parameters:
+        - name: sessionID
+          in: header
+          description: セッションID
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: A sucessful response.
@@ -46,6 +53,13 @@ paths:
         <b>ログイン時にセッションを保持</b><br>
         ログイン状態を確認して、ログインしていればユーザ―情報を取得する。サーバーサイドでsessionIDを発行して、これをクライアントに渡す。<br>
         sessionIDに加え、（アプリページに表示するため）Twitterアイコン、Twitterアカウント名も取得。
+      parameters:
+        - name: sessionID
+          in: header
+          description: セッションID
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: A sucessful response.
@@ -209,5 +223,4 @@ components:
         like:
           type: integer
           description: 0:NOPE,1:LIKE,2:SUPERLIKE
-
 

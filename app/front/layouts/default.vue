@@ -1,7 +1,7 @@
 <template>
   <v-app >
     <v-main>
-        <div v-if="$store.state.authUser">
+        <div v-if="$route.name == 'index' || $route.name.includes('result')">
           <NavSideBar/>
         </div>
       <v-container>
@@ -16,6 +16,8 @@ import NavSideBar from '~/components/NavSideBar.vue'
 export default {
   components: {
     NavSideBar,
+  },
+  mounted(){
   }
 }
 </script>

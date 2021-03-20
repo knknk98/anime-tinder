@@ -124,7 +124,7 @@ def create_app():
     def get_twitter_request_token():
         try:
             # リクエストトークンを取得し, 認証urlを取得してリダイレクトする. 失敗したらトップページへのリンクを提示する.
-            oauth_callback = "http://127.0.0.1:3000/callback"
+            # oauth_callback = ENV_VALUES['APP_URL']+"/callback"
             twitter = OAuth1Session(consumer_api_key, consumer_secret_key)
             twitter.fetch_request_token(request_token_url)
             auth_url = twitter.authorization_url(authorization_url)
@@ -273,7 +273,6 @@ def create_app():
             }
             print([data[1].image for data in joined_data])
             return jsonify(response_data)
-            pass
         else:
             return redirect(url_for("get_twitter_request_token"))
 
@@ -324,7 +323,7 @@ def create_app():
     def user_anime_matrix():
         # todo: user_idとanime_idを縦横にもち値がstatusの二次元配列を返す
         all_users = User.query.all()
-        user_num = len(all_users)
+        # user_num = len(all_users)
         anime_num = len(AnimeData.query.all())
         user_id_list = [user.user_id for user in all_users]
         print("user_id_list:", user_id_list)
@@ -391,7 +390,10 @@ def create_app():
     @app.route('/test')
     def testfunc():
         anime = AnimeData.query.filter(AnimeData.year.like('%2019%')).all()
-        response_data = {'anime'+str(i):{'title': a.title, 'desc': a.description} for i,a in enumerate(anime)}
+        response_data = {
+                            'anime'+str(i): {'title': a.title, 'desc': a.description}
+                            for i,a in enumerate(anime)
+                        }
         #print(session)
         return jsonify(response_data)
 
@@ -402,7 +404,10 @@ def create_app():
                     filter(LikeUnlike.user_id==1).all()
         print(lu_data)
         return 'test2'
-        response_data = {'anime'+str(i):{'user': lu.title, 'desc': lu.description} for i,lu in enumerate(lu_data)}
+        response_data = {
+                            'anime'+str(i): {'user': lu.title, 'desc': lu.description}
+                            for i,lu in enumerate(lu_data)
+                        }
         #print(session)
         return jsonify(response_data)
     """
