@@ -268,8 +268,9 @@ def create_app():
             # 各joinされたデータの二つ目がAnimeDataなので,
             # そのimageプロパティから画像をbase64でエンコードしたものを辞書にして返す.
             response_data = {
-                                'anime' + str(i): img_encode(data[1].image)
-                                for i, data in enumerate(joined_data)
+                                'animeImages': [
+                                    img_encode(data[1].image) for data in joined_data
+                                ]
                             }
             # print([data[1].image for data in joined_data])
             return jsonify(response_data)
@@ -302,8 +303,8 @@ def create_app():
                 .all()
             )
             response_data = {
-                "anime"
-                + str(i): {
+                "animes": [
+                {
                     "id": anime.anime_id,
                     "title": anime.title,
                     #'image': anime.image, # 画像をbase64で返す仕様についてはあとで
@@ -313,7 +314,8 @@ def create_app():
                     "genre": anime.genre,
                     "company": anime.company,
                 }
-                for i, anime in enumerate(animes)
+                for anime in animes
+                ]
             }
             return jsonify(response_data)
         else:
