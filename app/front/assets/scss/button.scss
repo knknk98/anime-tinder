@@ -1,0 +1,20 @@
+// v-iconにグラデーションが適用されなさそう
+#like-gradient {
+    // color: linear-gradient(to right, #4BEBCF, #17E191);
+    color: #4BEBCF;
+}
+
+#superlike-gradient {
+    // color: linear-gradient(to right, #3ACEFF, #31B2FF);
+    color: #3ACEFF;
+}
+
+#nope-gradient {
+    // color: linear-gradient(to right, $main-pink, $main-orange);
+    color: $main-pink;
+}
+
+#submit-gradient {
+    // color: linear-gradient(to right, $main-pink, $main-orange);
+    color: $main-orange;
+}
