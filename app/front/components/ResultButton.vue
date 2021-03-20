@@ -3,7 +3,7 @@
     class="mx-2"
     fab
     small
-    @click="submit"
+    @click="result"
   >
     <v-icon id="submit-gradient">
       mdi-arrow-right-thick
@@ -13,8 +13,8 @@
 <script>
 export default {
   methods: {
-    submit: function(){
-      this.$emit('submit');
+    result: function(){
+      this.$emit('result');
     },
   },
 }
