@@ -1,7 +1,5 @@
 from flask import Flask, request, jsonify, redirect, url_for, session
 import json
-
-# import uuid
 import hashlib
 import re
 from src.database import init_db, db
@@ -12,8 +10,8 @@ from flask_cors import CORS
 from src.settings import ENV_VALUES
 from src.utils import img_encode
 from sqlalchemy import desc, asc
-
 import numpy as np
+from typing import List
 
 # https://qiita.com/AndanteSysDes/items/a25acc1523fa674e7eda
 # https://qiita.com/shirakiya/items/0114d51e9c189658002e
@@ -35,8 +33,6 @@ def create_app():
     app.config.from_object("src.config.Config")  # configを別ファイルのオブジェクトから読み込む
     CORS(app)
 
-    # login_manager = LoginManager()
-    # login_manager.init_app(app)
     app.secret_key = b"\x17x\xf0\x83\x93i\x14\xa3\xec<7\x88A\xca\xb5G"
 
     init_db(app)  # databaseの初期化を行う
@@ -49,22 +45,6 @@ def create_app():
             return f"hello {name}"
         else:
             return redirect(url_for("get_twitter_request_token"))
-
-    @app.route("/show")
-    def show_users():
-        if "user_name" in session:
-            all_user = User.query.all()
-            number_of_user = len(all_user)
-            if not number_of_user == 0:
-                user_names_list = [user.name for user in all_user]
-                strings = "\n".join(str(user_names_list))
-            else:
-                strings = ""
-            return (
-                f'こんにちは{session["user_name"]}. 今ユーザーは{number_of_user}人います. \n' + strings
-            )
-        else:
-            return """ログインしてください.<a href="/login">ログインページ</a>"""
 
     # 認証画面を返す
     @app.route("/user/login", methods=["GET"])
@@ -79,8 +59,7 @@ def create_app():
 
         except Exception as e:
             print(e)
-            # return '''login failed. <a href="http://localhost:3000>top</a>'''
-            return f"{e}"
+            return redirect(ENV_VALUES['APP_URL'])
 
     @app.route("/user/callback", methods=["GET"])
     def callback():
@@ -117,13 +96,11 @@ def create_app():
                 # users = User.query.filter(User.user_id==access_token['user_id']).all()
 
                 # セッションID生成
-                # session_id = str(uuid.uuid4())
                 session_id = hashlib.sha256(
                     access_token["oauth_token"].encode("utf-8")
                 ).hexdigest()
                 if len(users) == 0:
                     # 存在しないなら登録処理
-                    # user = User(name=user_data['screen_name'], user_id=access_token['user_id'])
                     user = User(name=user_data["screen_name"], session_id=session_id)
                     db.session.add(user)
                     db.session.commit()
@@ -136,19 +113,11 @@ def create_app():
                     db.session.commit()
                 db.session.close()
 
-                # セッション変数の設定
-                # session['session_id'] = session_id
-                # session['user_name'] = access_token['screen_name']
-                # session['user_id'] = access_token['user_id']
-                # session['oauth_token'] = access_token['oauth_token']
-                # session['oauth_token_secret'] = access_token['oauth_token_secret']
-
                 # アイコン画像URLから_normalを取り除きオリジナルサイズのものを得ている. https://syncer.jp/Web/API/Twitter/Snippet/4/
                 image_url = re.sub(r"_normal", "", user_data["profile_image_url_https"])
                 # 返すデータを整えてjsonでreturn
                 response_data = {
                                     'sessionId': session_id,
-                                    # 'username': session['user_name'],
                                     'username': access_token['screen_name'],
                                     'profile_image_url': image_url
                                 }
@@ -160,51 +129,28 @@ def create_app():
                 )
         except Exception as e:
             print(e)
-            # return '''login failed. <a href="http://localhost:3000>top</a>'''
-            return f"{e}"
+            return redirect(ENV_VALUES['APP_URL'])
 
     @app.route("/user/logout", methods=["GET"])
     def logout():
         session_id = request.args.get("sessionID")
-        # セッション変数の削除（この辺今は働いてないので必要ない）
-        session.pop("session_id", None)
-        session.pop("user_name", None)
-        session.pop("user_id", None)
         user = User.query.filter(User.session_id == session_id).first()
         if user is not None:
             user.session_id = None
             db.session.commit()
-        # session.pop('oauth_token', None)
-        # session.pop('oauth_secret', None)
-        return redirect("http://127.0.0.1:3000")
-
-    @app.route("/user/user_delete")
-    def logout_and_delete():
-        # データベースからユーザー情報を削除
-        User.query.filter(User.name == access_token["screen_name"]).delete()
-        db.session.commit()
-        db.session.close()
-        # セッション変数の削除
-        session.pop("session_id", None)
-        session.pop("user_name", None)
-        session.pop("user_id", None)
-        user = User.query.filter(User.session_id == session_id).first()
-        if user is not None:
-            user.session_id = None
-            db.session.commit()
-        # session.pop('oauth_token', None)
-        # session.pop('oauth_secret', None)
-        return "logout successed and user data deleted"
+        return redirect(ENV_VALUES['APP_URL'])
 
     # recommendされた最近のアニメを取得する
+    # [GET] : "num": intに変換可能なstring, "sessionID": セッションID
+    # {'animes': [ {"image": base64(string), "id": int}]} が返る
     @app.route("/user/recent", methods=["GET"])
     def fetch_recent_user_data():
         image_num = request.args.get("num")
         session_id = request.args.get("sessionID")
         user = User.query.filter(User.session_id == session_id).first()
         # テスト用に定数設定してセッション関係なくするときのやつ
-        image_num = '5'
-        user = User.query.filter(User.name == "Kw_I_KU").first()
+        # image_num = '5'
+        # user = User.query.filter(User.name == "Kw_I_KU").first()
         if user is not None:
             # recommendedの日付データを見て新しい順に持ってくれば良い.
             # recommendedとAnimeDataをanime_idでjoinして, user_idを指定して時刻順にとってきて数の上限を設定する.
@@ -226,78 +172,86 @@ def create_app():
                                         for data in past_data
                                     ]
                                 }
-            # print([data[0].image for data in past_data])
             return jsonify(response_data)
         else:
             return redirect(ENV_VALUES['APP_URL'])
 
     # 指定した数(num)だけカードに表示するアニメの情報を取ってくる。DBにアクセスし、過去に表示したカード以外から適当に選んでくる。
-    @app.route("/app/recs", methods=["GET"])
+    # [POST] : {"num": intに変換可能なstring, "sessionID": string, "animeId": [int, ...]}
+    # {
+    #    'animes': [
+    #        {
+    #           "id": int,
+    #           "title": string,
+    #           "image": base64(string),
+    #           "description",
+    #           "id": anime_id,
+    #           "genre": [string, string, ...]
+    #           "company": string
+    #        }
+    #    ]
+    # }
+    # が返る
+    @app.route("/app/recs", methods=["POST"])
     def fetch_random_anime_data():
-        image_num = request.args.get("num")
-        session_id = request.args.get("sessionID")
-        # テストするときはパラメータが無いので他で適当にfilter
-        # user = User.query.filter(User.session_id==session_id).first()
-        image_num = "5"
-        user = User.query.filter(User.name == "Kw_I_KU").first()
-        if user is not None:
-            # todo usersテーブルに, 過去に表示したことのあるものをため込むカラムを作る. そこに入っていないものからランダムに選択する.
-            # likeunlikeを参照すればいいのでは？
-            lu_data = (
-                db.session.query(LikeUnlike)
-                .filter(LikeUnlike.user_id == user.user_id)
-                .all()
-            )
-            past_animes = [lu.anime_id for lu in lu_data]
-            # 過去に表示したことがあるものを含まないものからimage_num個に制限してとってくる
-            animes = (
-                db.session.query(AnimeData)
-                .filter(AnimeData.anime_id.notin_(past_animes))
-                .limit(int(image_num))
-                .all()
-            )
-            response_data = {
-                "animes": [
-                    {
-                        "id": anime.anime_id,
-                        "title": anime.title,
-                        # 画像をbase64で返す
-                        "image": img_encode(anime.image),
-                        "description": anime.description,
-                        "year": anime.year,
-                        "genre": anime.genre.split(),
-                        "company": anime.company,
-                    }
-                    for anime in animes
-                ]
-            }
-            return jsonify(response_data)
-        else:
-            return redirect(ENV_VALUES['APP_URL'])
+        if request.method == "POST":
+            # テスト用クエリ（これをターミナルで打ち込むとpostでjsonが送信されます. データベースにも反映されるはずです）
+            # curl http://localhost:5000//app/recs -X POST -H "Content-Type: application/json" --data '{"num": "5", "sessionID": "value", "animeId": [4,7,8,9,10]}'
+            image_num = request.json['num']
+            session_id = request.json['sessionID']
+            anime_id_buffer = request.json['animeId']
+            # テストするときはパラメータが無いので他で適当にfilter
+            user = User.query.filter(User.session_id == session_id).first()
+            # image_num = "5"
+            # user = User.query.filter(User.name == "Kw_I_KU").first()
+            if user is not None:
+                lu_data = (
+                    db.session.query(LikeUnlike)
+                    .filter(LikeUnlike.user_id == user.user_id)
+                    .all()
+                )
+                past_animes = [lu.anime_id for lu in lu_data] + anime_id_buffer
+                past_animes = list(set(past_animes))
+                # 過去に表示したことがあるものを含まないものからimage_num個に制限してとってくる
+                animes = (
+                    db.session.query(AnimeData)
+                    .filter(AnimeData.anime_id.notin_(past_animes))
+                    .limit(int(image_num))
+                    .all()
+                )
+                response_data = {
+                    "animes": [
+                        {
+                            "id": anime.anime_id,
+                            "title": anime.title,
+                            "image": img_encode(anime.image),  # 画像をbase64で返す
+                            "description": anime.description,
+                            "year": anime.year,
+                            "genre": anime.genre.split(),
+                            "company": anime.company,
+                        }
+                        for anime in animes
+                    ]
+                }
+                return jsonify(response_data)
+            else:
+                return redirect(ENV_VALUES['APP_URL'])
 
-    # @app.route("/test")
     def user_anime_matrix():
-        # todo: user_idとanime_idを縦横にもち値がstatusの二次元配列を返す
+        # user_idとanime_idを縦横にもち値がstatusの二次元配列を返す
         all_users = User.query.all()
-        # user_num = len(all_users)
         anime_num = len(AnimeData.query.all())
         user_id_list = [user.user_id for user in all_users]
         print("user_id_list:", user_id_list)
         res = []
         for user_id in user_id_list:
             # ユーザーひとりに対してアニメに対するlikeunlikeのstatusを取得, リストで保持する.
-            """
-            lu_data = db.session.query(LikeUnlike,AnimeData).\
-                        join(LikeUnlike, AnimeData.anime_id==LikeUnlike.anime_id).\
-                        filter(LikeUnlike.user_id==user_id).order_by(asc(LikeUnlike.anime_id)).all()
-            """
             lu_data = (
                 db.session.query(LikeUnlike)
                 .filter(LikeUnlike.user_id == user_id)
                 .order_by(asc(LikeUnlike.anime_id))
                 .all()
             )
-            # print(lu_data)
 
             if lu_data is not None:
                 # そのユーザーがlike_unlikeを一つでも設定しているなら
@@ -335,43 +289,56 @@ def create_app():
         cos_sim_mat = cos_sim_mat - np.diag(cos_sim_mat, k=0)
         return cos_sim_mat
 
-    def collaborative_filtering(ith_anime: int) -> int:
+    def collaborative_filtering(ith_anime: int, liked_anime_list: List[int]) -> int:
         """
         i 番目のアニメに対して、コサイン類似度ベースの協調フィルタリングでレコメンドされたアニメのid を返します。
+        既にlike 済みのアニメは無視します。
         """
         cos_sim_mat = anime_similarity()
-        ret = np.argmax(cos_sim_mat[ith_anime])
-        return ret
+        recommend_vec = cos_sim_mat[ith_anime]
+        recommend_vec[liked_anime_list] = 0
+        recommend_id = np.argmax(recommend_vec)
+        return recommend_id
 
+    # likeunlikeステータスを受け取り、過去の情報をもとにおすすめの情報を返す.
+    # [POST] : {"sessionID": セッションID, "animes": [{"animeId": string, "like", int}, ...]}
+    # {
+    #    'animes': [
+    #        {
+    #           "id": int,
+    #           "title": string,
+    #           "image": base64(string),
+    #           "description",
+    #           "genre": [string, string, ...]
+    #           "company": string
+    #        }
+    #    ]
+    # }
+    # が返る
     @app.route('/app/rslts', methods=['POST'])
     def anime_results():
         if request.method == "POST":
-            # likeunlikeステータスを受け取り、過去の情報をもとにおすすめの情報を返す.
-            # 今度はpostで受け取り, データを展開しておく
             # テスト用クエリ（これをターミナルで打ち込むとpostでjsonが送信されます. データベースにも反映されるはずです）
-            # curl http://localhost:5000/app/rslts -X POST -H "Content-Type: application/json" --data '{"sessionID": "value", "RequestBody": [{"animeId": "4", "like": "0"}, {"animeId": "5", "like": "2"}]}'
+            # curl http://localhost:5000/app/rslts -X POST -H "Content-Type: application/json" --data '{"sessionID": "value", "animes": [{"animeId": "4", "like": "0"}, {"animeId": "5", "like": "2"}]}'
 
-            # application/jsonで送られている場合request.jsonで取得可能
-            # https://qiita.com/naoko_s/items/04d68998cfdbe9c1b5f2
             session_id = request.json['sessionID']
-            request_body = request.json['RequestBody']
+            request_body = request.json['animes']
             # 送られてきたアニメidとstatusのリストを並べた二次元リストに展開しておく.
             all_ul_data = [[int(anime['animeId']), int(anime['like'])] for anime in request_body]
-            print(all_ul_data)
 
             # テストするときはパラメータが無いので他で適当にfilter
-            # user = User.query.filter(User.session_id==session_id).first()
-            user = User.query.filter(User.name == "Kw_I_KU").first()
+            user = User.query.filter(User.session_id == session_id).first()
+            # user = User.query.filter(User.name == "Kw_I_KU").first()
             if user is not None:
                 try:
                     for ul_data in all_ul_data:
                         # like_unlikeの登録をする. 過去に同じuserとanime_idに対して登録があれば, それを更新する.
-                        post_ul = LikeUnlike.query.\
+                        past_ul = LikeUnlike.query.\
                             filter(LikeUnlike.user_id == user.user_id).\
                             filter(LikeUnlike.anime_id == ul_data[0]).first()
-                        if post_ul is not None:
+                        if past_ul is not None:
                             # 過去に登録されたものがあれば更新
-                            post_ul.status = ul_data[1]
+                            past_ul.status = ul_data[1]
                         else:
                             # Noneなら追加
                             like_unlike = LikeUnlike(
@@ -382,14 +349,24 @@ def create_app():
                             db.session.add(like_unlike)
                         db.session.commit()
                     # 登録が終わったら今回受け取った情報でlike以上のものを一つ選び、レコメンドアルゴリズムに渡す.
+                    # like以上が一つでもあるならsuperlikeなものを探してそちらを優先する. なければlikeを取得, なければempty.
                     like_anime_data = [anime_data[0] for anime_data in all_ul_data if anime_data[1] > 0]
                     if len(like_anime_data) > 0:
-                        like_anime_id = like_anime_data[0]
+                        superlike_anime_data = [anime_data[0] for anime_data in all_ul_data if anime_data[1] == 2]
+                        if len(superlike_anime_data) > 0:
+                            like_anime_id = superlike_anime_data[0]
+                        else:
+                            like_anime_id = like_anime_data[0]
                     else:
-                        raise Exception('like_anime_data is []')
+                        raise Exception('like_anime_data is empty')
+                    # 今までにlike/unlikeを押したことのある全てのanime_idを取得する. 渡すとき0-indexにしたいので-1しておく.
+                    past_ul_data = LikeUnlike.query.\
+                        filter(LikeUnlike.user_id == user.user_id).all()
+                    past_ul_list = [data.anime_id - 1 for data in past_ul_data]
 
-                    # 今はリストのargが返ってくるので+1してアニメidに直す. 修正するかも
-                    recommend = collaborative_filtering(like_anime_id) + 1
+                    # 今はリストのargが返ってくるので+1してアニメidに直す.
+                    recommend = collaborative_filtering(like_anime_id, past_ul_list) + 1
+
                     # recommendがidなので、その情報を返す. 一つだけとってくる
                     anime = (
                         db.session.query(AnimeData)
@@ -398,7 +375,7 @@ def create_app():
                     )
                     # 該当アニメがないなら例外でエラー
                     if anime is None:
-                        raise Exception('anime is None')
+                        raise Exception('anime data not found')
 
                     # recommendedに登録する
                     recommended_anime = Recommended(
@@ -430,31 +407,34 @@ def create_app():
                 return redirect(ENV_VALUES['APP_URL'])
         pass
 
-    """
-    @app.route('/test')
-    def testfunc():
-        anime = AnimeData.query.filter(AnimeData.year.like('%2019%')).all()
-        response_data = {
-                            'anime'+str(i): {'title': a.title, 'desc': a.description}
-                            for i,a in enumerate(anime)
-                        }
-        #print(session)
-        return jsonify(response_data)
-
-    @app.route('/test2')
-    def testfunc2():
-        lu_data = db.session.query(AnimeData,LikeUnlike).\
-                    join(LikeUnlike, AnimeData.anime_id==LikeUnlike.anime_id).\
-                    filter(LikeUnlike.user_id==1).all()
-        print(lu_data)
-        return 'test2'
-        response_data = {
-                            'anime'+str(i): {'user': lu.title, 'desc': lu.description}
-                            for i,lu in enumerate(lu_data)
-                        }
-        #print(session)
-        return jsonify(response_data)
-    """
+        @app.route('/app/fetch', methods=['GET'])
+        def fetch_anime_data():
+            anime_id = request.args.get("animeId")
+            session_id = request.args.get("sessionID")
+            user = User.query.filter(User.session_id == session_id).first()
+            if user is not None:
+                anime_data = db.session.query(AnimeData).\
+                            filter(AnimeData.anime_id == anime_id).first()
+                if anime_data is None:
+                    response_data = {'animes': []}
+                else:
+                    response_data = {
+                        "animes":
+                        [
+                            {
+                                "id": anime.anime_id,
+                                "title": anime.title,
+                                "image": img_encode(anime.image),
+                                "description": anime.description,
+                                "year": anime.year,
+                                "genre": anime.genre.split(),
+                                "company": anime.company,
+                            }
+                        ]
+                    }
+                return jsonify(response_data)
+            else:
+                return redirect(ENV_VALUES['APP_URL'])
 
     return app
 
