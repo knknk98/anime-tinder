@@ -182,9 +182,9 @@ def create_app():
                 db.session.close()
 
                 # セッション変数の設定
-                session['session_id'] = session_id
-                session['user_name'] = access_token['screen_name']
-                session['user_id'] = access_token['user_id']
+                # session['session_id'] = session_id
+                # session['user_name'] = access_token['screen_name']
+                # session['user_id'] = access_token['user_id']
                 # session['oauth_token'] = access_token['oauth_token']
                 # session['oauth_token_secret'] = access_token['oauth_token_secret']
 
@@ -193,8 +193,9 @@ def create_app():
                 image_url = re.sub(r'_normal', '', user_data['profile_image_url_https'])
                 # 返すデータを整えてjsonでreturn
                 response_data = {
-                                    'sessionId': session['session_id'],
-                                    'username': session['user_name'],
+                                    'sessionId': session_id,
+                                    # 'username': session['user_name'],
+                                    'username': access_token['screen_name'],
                                     'profile_image_url': image_url
                                 }
                 # print(session)
@@ -257,10 +258,10 @@ def create_app():
                                 'anime' + str(i): img_encode(data[1].image)
                                 for i, data in enumerate(joined_data)
                             }
-            print([data[1].image for data in joined_data])
+            # print([data[1].image for data in joined_data])
             return jsonify(response_data)
         else:
-            return redirect(url_for('get_twitter_request_token'))
+            return redirect(ENV_VALUES['APP_URL'])
 
     # 指定した数(num)だけカードに表示するアニメの情報を取ってくる。DBにアクセスし、過去に表示したカード以外から適当に選んでくる。
     @app.route('/app/recs', methods=['GET'])
