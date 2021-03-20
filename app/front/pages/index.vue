@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="box home-background">
     <v-row justify="center" align="center">
       <v-col cols="12" sm="8" md="6">
         <v-card>
