@@ -41,7 +41,7 @@ import ResultButton from '@/components/ResultButton';
 import VueTinder from 'vue-tinder';
 
 export default {
-  //middleware: 'authenticated',
+  middleware: 'authenticated',
   components: {
     Loading,
     NopeButton,
@@ -123,8 +123,7 @@ export default {
         sessionID: this.$store.state.authUser,
       }).then(res => {
         this.loading = false;
-        console.log(res.data);
-        // this.$router.replace({ name: 'result' , key: res.data.id});
+        this.$router.push({  name: 'result', query: {id: res.data.animes[0].id}  });
       }).catch(err => {
       });
     },
