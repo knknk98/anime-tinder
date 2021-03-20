@@ -1,6 +1,8 @@
-from flask import Flask, request, jsonify, redirect, url_for, session
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session
+
 # from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 import json
+
 # import uuid
 import hashlib
 import re
@@ -13,6 +15,8 @@ from src.settings import ENV_VALUES
 from src.utils import img_encode
 from sqlalchemy import desc, asc
 
+import numpy as np
+
 # https://qiita.com/AndanteSysDes/items/a25acc1523fa674e7eda
 # https://qiita.com/shirakiya/items/0114d51e9c189658002e
 # https://qiita.com/kai_kou/items/5d73de21818d1d582f00
@@ -21,48 +25,49 @@ from sqlalchemy import desc, asc
 
 def create_app():
     # twitter api key
-    consumer_api_key = ENV_VALUES['CONSUMER_API_KEY']
-    consumer_secret_key = ENV_VALUES['CONSUMER_SECRET_KEY']
+    consumer_api_key = ENV_VALUES["CONSUMER_API_KEY"]
+    consumer_secret_key = ENV_VALUES["CONSUMER_SECRET_KEY"]
     # Twitter api URLs
-    request_token_url = 'https://api.twitter.com/oauth/request_token'
-    authorization_url = 'https://api.twitter.com/oauth/authorize'
-    access_token_url = 'https://api.twitter.com/oauth/access_token'
+    request_token_url = "https://api.twitter.com/oauth/request_token"
+    authorization_url = "https://api.twitter.com/oauth/authorize"
+    access_token_url = "https://api.twitter.com/oauth/access_token"
 
     app = Flask(__name__)
-    app.config.from_object('src.config.Config')  # configを別ファイルのオブジェクトから読み込む
+    app.config.from_object("src.config.Config")  # configを別ファイルのオブジェクトから読み込む
     CORS(app)
 
     # login_manager = LoginManager()
     # login_manager.init_app(app)
-    app.secret_key = b'\x17x\xf0\x83\x93i\x14\xa3\xec<7\x88A\xca\xb5G'
+    app.secret_key = b"\x17x\xf0\x83\x93i\x14\xa3\xec<7\x88A\xca\xb5G"
 
     init_db(app)  # databaseの初期化を行う
 
-    @app.route('/')
+    @app.route("/")
     def index():
-        if 'user_name' in session:
+        if "user_name" in session:
             # セッション変数の取得
-            name = session['user_name']
-            return f'hello {name}'
+            name = session["user_name"]
+            return f"hello {name}"
         else:
-            return redirect(url_for('get_twitter_request_token'))
+            return redirect(url_for("get_twitter_request_token"))
 
-    @app.route('/show')
+    @app.route("/show")
     def show_users():
-        if 'user_name' in session:
+        if "user_name" in session:
             all_user = User.query.all()
             number_of_user = len(all_user)
             if not number_of_user == 0:
                 user_names_list = [user.name for user in all_user]
-                strings = '\n'.join(str(user_names_list))
+                strings = "\n".join(str(user_names_list))
             else:
-                strings = ''
-            return f'こんにちは{session["user_name"]}.\
-                        今ユーザーは{number_of_user}人います. \n' + strings
+                strings = ""
+            return (
+                f'こんにちは{session["user_name"]}. 今ユーザーは{number_of_user}人います. \n' + strings
+            )
         else:
-            return '''ログインしてください.<a href="/login">ログインページ</a>'''
+            return """ログインしてください.<a href="/login">ログインページ</a>"""
 
-    '''
+    """
     @app.route('/add')
     def add_user():
         #user = User(name='name', email='test@test.com')
@@ -80,8 +85,8 @@ def create_app():
             return 'ユーザーを減らしました'
         else:
             return 'ユーザーはひとりもいません'
-    '''
-    '''
+    """
+    """
     @app.route('/login', methods=['POST', 'GET'])
     def login_test():
         if request.method == 'POST':
@@ -112,10 +117,10 @@ def create_app():
                         <p><input type=submit value=login>
                     </form>
 
-    '''
+    """
 
     # 認証画面を返す
-    @app.route('/user/login', methods=['GET'])
+    @app.route("/user/login", methods=["GET"])
     def get_twitter_request_token():
         try:
             # リクエストトークンを取得し, 認証urlを取得してリダイレクトする. 失敗したらトップページへのリンクを提示する.
@@ -128,48 +133,51 @@ def create_app():
         except Exception as e:
             print(e)
             # return '''login failed. <a href="http://localhost:3000>top</a>'''
-            return f'{e}'
+            return f"{e}"
 
-    @app.route('/user/callback', methods=['GET'])
+    @app.route("/user/callback", methods=["GET"])
     def callback():
-        users_show_url = 'https://api.twitter.com/1.1/users/show.json'
+        users_show_url = "https://api.twitter.com/1.1/users/show.json"
         try:
             # getパラメータを取得
-            oauth_token = request.args.get('oauth_token')
-            oauth_verifier = request.args.get('oauth_verifier')
+            oauth_token = request.args.get("oauth_token")
+            oauth_verifier = request.args.get("oauth_verifier")
             # リクエストトークン取得から返ってきたgetパラメータを用いてアクセストークンを取得. 失敗したら認証のときと同様
             twitter = OAuth1Session(
-                        consumer_api_key,
-                        consumer_secret_key,
-                        oauth_token,
-                        oauth_verifier
-                    )
-            response = twitter.post(access_token_url, params={'oauth_verifier': oauth_verifier})
+                consumer_api_key, consumer_secret_key, oauth_token, oauth_verifier
+            )
+            response = twitter.post(
+                access_token_url, params={"oauth_verifier": oauth_verifier}
+            )
             access_token = dict(parse_qsl(response.content.decode("utf-8")))
 
             twitter = OAuth1Session(
-                        consumer_api_key, consumer_secret_key,
-                        access_token['oauth_token'],
-                        access_token['oauth_token_secret']
-                    )
+                consumer_api_key,
+                consumer_secret_key,
+                access_token["oauth_token"],
+                access_token["oauth_token_secret"],
+            )
             response = twitter.get(
-                        users_show_url, params={'user_id': access_token['user_id']}
-                    )
+                users_show_url, params={"user_id": access_token["user_id"]}
+            )
 
             if response.status_code == 200:
                 user_data = json.loads(response.text)
                 # ユーザー登録とセッション情報の兼ね合いがどうなるか未定なのでこのようにしておく
-                users = User.query.filter(User.name == access_token['screen_name']).all()
-                # users = User.query.filter(User.user_id == access_token['user_id']).all()
+                users = User.query.filter(
+                    User.name == access_token["screen_name"]
+                ).all()
+                # users = User.query.filter(User.user_id==access_token['user_id']).all()
 
                 # セッションID生成
                 # session_id = str(uuid.uuid4())
-                session_id = hashlib.\
-                    sha256(access_token['oauth_token'].encode('utf-8')).hexdigest()
+                session_id = hashlib.sha256(
+                    access_token["oauth_token"].encode("utf-8")
+                ).hexdigest()
                 if len(users) == 0:
                     # 存在しないなら登録処理
                     # user = User(name=user_data['screen_name'], user_id=access_token['user_id'])
-                    user = User(name=user_data['screen_name'], session_id=session_id)
+                    user = User(name=user_data["screen_name"], session_id=session_id)
                     db.session.add(user)
                     db.session.commit()
                 else:
@@ -188,9 +196,8 @@ def create_app():
                 # session['oauth_token'] = access_token['oauth_token']
                 # session['oauth_token_secret'] = access_token['oauth_token_secret']
 
-                # アイコン画像URLから_normalを取り除きオリジナルサイズのものを得ている.
-                # https://syncer.jp/Web/API/Twitter/Snippet/4/
-                image_url = re.sub(r'_normal', '', user_data['profile_image_url_https'])
+                # アイコン画像URLから_normalを取り除きオリジナルサイズのものを得ている. https://syncer.jp/Web/API/Twitter/Snippet/4/
+                image_url = re.sub(r"_normal", "", user_data["profile_image_url_https"])
                 # 返すデータを整えてjsonでreturn
                 response_data = {
                                     'sessionId': session_id,
@@ -201,19 +208,21 @@ def create_app():
                 # print(session)
                 return jsonify(response_data)
             else:
-                raise Exception(f'response status code is not 200 (is {response.status_code})')
+                raise Exception(
+                    f"response status code is not 200 (is {response.status_code})"
+                )
         except Exception as e:
             print(e)
             # return '''login failed. <a href="http://localhost:3000>top</a>'''
-            return f'{e}'
+            return f"{e}"
 
-    @app.route('/user/logout', methods=['GET'])
+    @app.route("/user/logout", methods=["GET"])
     def logout():
-        session_id = request.args.get('sessionID')
+        session_id = request.args.get("sessionID")
         # セッション変数の削除（この辺今は働いてないので必要ない）
-        session.pop('session_id', None)
-        session.pop('user_name', None)
-        session.pop('user_id', None)
+        session.pop("session_id", None)
+        session.pop("user_name", None)
+        session.pop("user_id", None)
         user = User.query.filter(User.session_id == session_id).first()
         if user is not None:
             user.session_id = None
@@ -221,27 +230,30 @@ def create_app():
         # session.pop('oauth_token', None)
         # session.pop('oauth_secret', None)
         # return redirect(url_for('login_test'))
-        return redirect(ENV_VALUES['APP_URL'])
+        return redirect("http://127.0.0.1:3000")
 
-    @app.route('/user/user_delete')
+    @app.route("/user/user_delete")
     def logout_and_delete():
         # データベースからユーザー情報を削除
-        session_id = request.args.get('sessionID')
-        User.query.filter(User.session_id == session_id).delete()
+        User.query.filter(User.name == access_token["screen_name"]).delete()
         db.session.commit()
         db.session.close()
         # セッション変数の削除
-        session.pop('session_id', None)
-        session.pop('user_name', None)
-        session.pop('user_id', None)
+        session.pop("session_id", None)
+        session.pop("user_name", None)
+        session.pop("user_id", None)
+        user = User.query.filter(User.session_id == session_id).first()
+        if user is not None:
+            user.session_id = None
+            db.session.commit()
         # session.pop('oauth_token', None)
         # session.pop('oauth_secret', None)
-        return 'logout successed and user data deleted'
+        return "logout successed and user data deleted"
 
-    @app.route('/user/recent', methods=['GET'])
+    @app.route("/user/recent", methods=["GET"])
     def fetch_recent_user_data():
-        image_num = request.args.get('num')
-        session_id = request.args.get('sessionID')
+        image_num = request.args.get("num")
+        session_id = request.args.get("sessionID")
         user = User.query.filter(User.session_id == session_id).first()
         # テスト用に定数設定してセッション関係なくするときのやつ
         # image_num = '4'
@@ -267,62 +279,70 @@ def create_app():
             return redirect(ENV_VALUES['APP_URL'])
 
     # 指定した数(num)だけカードに表示するアニメの情報を取ってくる。DBにアクセスし、過去に表示したカード以外から適当に選んでくる。
-    @app.route('/app/recs', methods=['GET'])
+    @app.route("/app/recs", methods=["GET"])
     def fetch_random_anime_data():
-        image_num = request.args.get('num')
-        session_id = request.args.get('sessionID')
-        user = User.query.filter(User.session_id == session_id).first()
+        image_num = request.args.get("num")
+        session_id = request.args.get("sessionID")
         # テストするときはパラメータが無いので他で適当にfilter
-        # image_num = '4'
-        # user = User.query.filter(User.name == "Kw_I_KU").first()
+        # user = User.query.filter(User.session_id==session_id).first()
+        image_num = "4"
+        user = User.query.filter(User.name == "Kw_I_KU").first()
         if user is not None:
             # todo usersテーブルに, 過去に表示したことのあるものをため込むカラムを作る. そこに入っていないものからランダムに選択する.
             # likeunlikeを参照すればいいのでは？
-            lu_data = db.session.query(LikeUnlike).\
-                        filter(LikeUnlike.user_id == user.user_id).\
-                        all()
+            lu_data = (
+                db.session.query(LikeUnlike)
+                .filter(LikeUnlike.user_id == user.user_id)
+                .all()
+            )
             past_animes = [lu.anime_id for lu in lu_data]
             # 過去に表示したことがあるものを含まないものからimage_num個に制限してとってくる
-            animes = db.session.query(AnimeData).\
-                filter(AnimeData.anime_id.notin_(past_animes)).\
-                limit(int(image_num)).all()
+            animes = (
+                db.session.query(AnimeData)
+                .filter(AnimeData.anime_id.notin_(past_animes))
+                .limit(int(image_num))
+                .all()
+            )
             response_data = {
-                                'anime' + str(i): {
-                                    'id': anime.anime_id,
-                                    'title': anime.title,
-                                    # 'image': anime.image, # 画像をbase64で返す仕様についてはあとで
-                                    # base64でutf-8文字列にエンコードして返す
-                                    'image': img_encode(anime.image),
-                                    'description': anime.description,
-                                    'year': anime.year,
-                                    'genre': anime.genre,
-                                    'company': anime.company
-                                    }\
-                                for i, anime in enumerate(animes)
-                            }
+                "anime"
+                + str(i): {
+                    "id": anime.anime_id,
+                    "title": anime.title,
+                    #'image': anime.image, # 画像をbase64で返す仕様についてはあとで
+                    "image": img_encode(anime.image),
+                    "description": anime.description,
+                    "year": anime.year,
+                    "genre": anime.genre,
+                    "company": anime.company,
+                }
+                for i, anime in enumerate(animes)
+            }
             return jsonify(response_data)
         else:
-            return redirect(ENV_VALUES['APP_URL'])
+            return redirect("http://127.0.0.1:3000")
 
-    # @app.route('/test')
+    @app.route("/test")
     def user_anime_matrix():
         # todo: user_idとanime_idを縦横にもち値がstatusの二次元配列を返す
         all_users = User.query.all()
         # user_num = len(all_users)
         anime_num = len(AnimeData.query.all())
         user_id_list = [user.user_id for user in all_users]
-        print('user_id_list:', user_id_list)
+        print("user_id_list:", user_id_list)
         res = []
         for user_id in user_id_list:
             # ユーザーひとりに対してアニメに対するlikeunlikeのstatusを取得, リストで保持する.
-            '''
+            """
             lu_data = db.session.query(LikeUnlike,AnimeData).\
                         join(LikeUnlike, AnimeData.anime_id==LikeUnlike.anime_id).\
                         filter(LikeUnlike.user_id==user_id).order_by(asc(LikeUnlike.anime_id)).all()
-            '''
-            lu_data = db.session.query(LikeUnlike).\
-                filter(LikeUnlike.user_id == user_id).\
-                order_by(asc(LikeUnlike.anime_id)).all()
+            """
+            lu_data = (
+                db.session.query(LikeUnlike)
+                .filter(LikeUnlike.user_id == user_id)
+                .order_by(asc(LikeUnlike.anime_id))
+                .all()
+            )
             # print(lu_data)
 
             if lu_data is not None:
@@ -348,7 +368,27 @@ def create_app():
         # アニメID順にステータスが並んだリストがユーザーごとに並んでいる二次元リストを返す.
         return res
 
-    '''
+    def anime_similarity():
+        content_lu = np.array(user_anime_matrix()).T
+        # anime_num, user_num = content_lu.shape[0], content_lu.shape[1]
+        corr_mat = np.dot(content_lu, content_lu.T)
+        anime_norm_mat = np.outer(np.linalg.norm(content_lu, axis=1))
+        anime_norm_mat = np.where(
+            np.absolute(anime_norm_mat) < 0.001, anime_norm_mat, 1
+        )
+        cos_sim_mat = corr_mat / anime_norm_mat
+        cos_sim_mat = cos_sim_mat - np.diag(cos_sim_mat, k=0)
+        return cos_sim_mat
+
+    def collaborative_filtering(ith_anime: int) -> int:
+        """
+        i 番目のアニメに対して、コサイン類似度ベースの協調フィルタリングでレコメンドされたアニメのid を返します。
+        """
+        cos_sim_mat = anime_similarity()
+        ret = np.argmax(cos_sim_mat[ith_anime])
+        return ret
+
+    """
     @app.route('/test')
     def testfunc():
         anime = AnimeData.query.filter(AnimeData.year.like('%2019%')).all()
@@ -372,7 +412,7 @@ def create_app():
                         }
         #print(session)
         return jsonify(response_data)
-    '''
+    """
 
     return app
 
