@@ -6,9 +6,9 @@
 <script>
 export default {
   methods: {
-     login: function () {
-        window.location.href = this.$config.serverURL+"/user/login";
+    login: function () {
+      window.location.href = this.$config.serverURL+"/user/login";
     },
-  }
+  },
 }
 </script>
