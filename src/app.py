@@ -245,15 +245,18 @@ def create_app():
         user = User.query.filter(User.session_id == session_id).first()
         # テスト用に定数設定してセッション関係なくするときのやつ
         # image_num = '4'
-        # user = User.query.filter(User.name == "Kw_I_KU").first()
+        # user = User.query.filter(User.name == "littleaikawa").first()
         if user is not None:
             # todo : usersテーブルに直近の結果を持たせ、そこからとってくる.
             # likeunlikeの日付データを見て一番新しいやつを持ってくれば良い.
+            # LikeUnlikeとAnimeDataをanime_idでjoinして, user_idを指定して時刻順にとってきて数の上限を設定する.
             joined_data = db.session.query(LikeUnlike, AnimeData).\
                         join(LikeUnlike, AnimeData.anime_id == LikeUnlike.anime_id).\
                         filter(LikeUnlike.user_id == user.user_id).\
                         order_by(desc(LikeUnlike.updated_at)).\
                         limit(int(image_num)).all()
+            # 各joinされたデータの二つ目がAnimeDataなので,
+            # そのimageプロパティから画像をbase64でエンコードしたものを辞書にして返す.
             response_data = {
                                 'anime' + str(i): img_encode(data[1].image)
                                 for i, data in enumerate(joined_data)
