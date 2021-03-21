@@ -60,6 +60,9 @@
 
 <script>
   export default {
+    props: {
+      title: String,
+    },
     data: () => ({
       rules: [v => !!v || '',
               v => (!!v && v.length <= 140) || `Max 140 characters`],
