@@ -122,7 +122,6 @@ export default {
         animes: this.animesorted, 
         sessionID: this.$store.state.authUser,
       }).then(res => {
-        this.loading = false;
         this.$router.push({  name: 'result', query: {id: res.data.animes[0].id}  });
       }).catch(err => {
       });

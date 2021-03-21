@@ -2,10 +2,10 @@
   <div>
     <Loading v-show="loading"></Loading>
     <div class="home-background mt-5" v-show="!loading">
-        <TheResultTextBox/>
-        <TheResultAnimeInfo/>
-        <CaptionBox title="結果をシェアする" />
-        <SNSShareButton/>
+      <TheResultTextBox :title="animeInfo.title"/>
+      <TheResultAnimeInfo :anime="animeInfo"/>
+      <CaptionBox title="結果をシェアする" />
+      <SNSShareButton :title="animeInfo.title"/>
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
     return {
       name: 'result',
       loading: true,
-      animeInfo: [],
+      animeInfo: {},
     }
   },
   async mounted() {
@@ -40,8 +40,8 @@ export default {
         "sessionID": this.$store.state.authUser,
       },
     }).then(res => {
-      this.animeInfo = res.data.animes;
-      loading = false;
+      this.animeInfo = res.data.animes[0];
+      this.loading = false;
     }).catch(err => {
     });
   },
