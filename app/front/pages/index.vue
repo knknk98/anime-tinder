@@ -89,7 +89,6 @@ export default {
     // フリック
     onSort: function (choice) {
       const id = this.animequeue[0].id;
-      console.log(this.animequeue[0].image);
       var res = {};
       switch (choice.type) {
         case 'nope': // 左
