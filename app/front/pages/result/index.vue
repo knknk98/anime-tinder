@@ -33,6 +33,8 @@ export default {
     }
   },
   async mounted() {
+    // 1回やったユーザー
+    this.$store.commit('setStarted', false);
     var animeId = this.$route.query.id;
     await axios.post(this.$config.serverURL+'/app/fetch', {
       animeId: animeId,
