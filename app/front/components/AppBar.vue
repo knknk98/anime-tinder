@@ -44,7 +44,7 @@
                 :href="item.to"
                 cols=5
                 class="d-flex child-flex">
-                <v-img :src="item.imageUrl" ></v-img>
+                <v-img :src="'data:image/jpg;base64,'+item.image" ></v-img>
             </v-col>
         </v-row>
     </v-navigation-drawer>

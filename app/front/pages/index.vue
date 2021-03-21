@@ -12,7 +12,7 @@
           slot-scope="scope"
           class="pic vertical-gradient"
           :style="{
-            'background-image': `data:image/jpeg;base64,${scope.data.image}`,
+            'background-image': `data:image/jpg;base64,${scope.data.image}`,
           }"
         >
           <h2 id="tinder-title">{{scope.data.title}}</h2>
