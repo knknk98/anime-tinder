@@ -18,7 +18,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     //title: process.env.npm_package_name || '',
-    titleTemplate:  '%sタイトル | オタクとアニメのマッチングサービス',
+    titleTemplate:  '%sToonder | オタクとアニメのマッチングサービス',
     htmlAttrs: {
       lang: 'en'
     },
