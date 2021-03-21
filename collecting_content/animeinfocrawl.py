@@ -1,7 +1,7 @@
 import json
 import os
 
-from bs4 import BeautifulSoup
+from bs4 import Beautiful
 import requests
 from logzero import logger
 
@@ -23,8 +23,8 @@ def main() -> None:
         with open(os.path.join(DOWNLOAD_PATH, "anime_link_per_age.html"), "w") as fp:
             fp.write(r.text)
 
-    soup = BeautifulSoup(text, "html.parser")
-    link_area = soup.select_one("#mw-subcategories")
+     = Beautiful(text, "html.parser")
+    link_area = .select_one("#mw-subcategories")
     links = link_area.find_all("a")
 
     url_base = "https://ja.wikipedia.org/"
@@ -48,8 +48,8 @@ def main() -> None:
             with open(os.path.join(DOWNLOAD_PATH, f"anime_{year}.html"), "w") as fp:
                 fp.write(r.text)
 
-        soup = BeautifulSoup(text, "html.parser")
-        link_area = soup.select_one("#mw-pages")
+         = Beautiful(text, "html.parser")
+        link_area = .select_one("#mw-pages")
         links_in_the_year = link_area.find_all("a")
 
         for anime in links_in_the_year:

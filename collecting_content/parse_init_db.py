@@ -3,7 +3,7 @@ import re
 from urllib.parse import urlencode
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import Beautiful
 
 def create_csv_from_sql():
     with open("init_db.txt") as fp:
@@ -28,7 +28,7 @@ def arrange_csv():
                 description = row[3]
                 if description == "description":
                     url = "https://ja.wikipedia.org/wiki/" + urlencode(title)
-                    
+
 
 if __name__ == "__main__":
     arrange_csv()

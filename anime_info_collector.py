@@ -2,7 +2,7 @@ import dataclasses
 import json
 from urllib.parse import urlencode
 
-from bs4 import BeautifulSoup
+from bs4 import Beautiful
 from logzero import logger
 import requests
 
@@ -33,8 +33,8 @@ class InfoCollector:
         return url
 
     def extract_animeinfo_from_html(self, html: str) -> AnimeInfo:
-        soup = BeautifulSoup(html, "html.parser")
-        info_table = soup.select(
+        soup = Beautiful(html, "html.parser")
+        info_table = .select(
             "#mw-content-text > div.mw-parser-output > table.infobox.bordered"
         )
         print(info_table)
