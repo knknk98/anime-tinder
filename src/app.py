@@ -378,13 +378,18 @@ def create_app():
                     if anime is None:
                         raise Exception('anime data not found')
 
-                    # recommendedに登録する
-                    recommended_anime = Recommended(
-                        user_id=user.user_id,
-                        anime_id=recommend
-                    )
-                    db.session.add(recommended_anime)
-                    db.session.commit()
+                    # recommendedに登録する. 既存なら何もしない.
+                    past_recommend = Recommended.query.\
+                        filter(Recommended.user_id == user.user_id).\
+                        filter(Recommended.anime_id == recommend).first()
+                    if past_recommend is None:
+                        # Noneなら追加
+                        recommended_anime = Recommended(
+                            user_id=user.user_id,
+                            anime_id=recommend
+                        )
+                        db.session.add(recommended_anime)
+                        db.session.commit()
                     response_data = {
                         "animes":
                         [
@@ -404,10 +409,10 @@ def create_app():
                     # 例外を受け取ったらRecommendedの直近を返すことにする.
                     print(e)
                     anime = db.session.query(Recommended, AnimeData).\
-                                join(Recommended, AnimeData.anime_id == Recommended.anime_id).\
-                                filter(Recommended.user_id == user.user_id).\
-                                order_by(desc(Recommended.updated_at)).\
-                                first()[1]
+                        join(Recommended, AnimeData.anime_id == Recommended.anime_id).\
+                        filter(Recommended.user_id == user.user_id).\
+                        order_by(desc(Recommended.updated_at)).\
+                        first()[1]
                     if anime is None:
                         response_data = {"animes": []}
                     else:
