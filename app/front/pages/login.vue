@@ -3,7 +3,7 @@
     <div id="login-gridA">
       <div class="block-box">
           <div class="pa-md-10">
-          <h1>タイトル</h1>
+          <strong class="text-h1">Toonder</strong>
           <h2 class="catchcopy">オタクは急展開する。<br>アニメひとつで。</h2>
           <br/>
           <LoginButton/>
@@ -25,6 +25,9 @@ export default {
   data() {
     return {
       name: 'login',
+      image_srcs: [
+          require("@/assets/image/logo.png"),
+      ]
     }
   },
   head() {

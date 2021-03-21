@@ -43,7 +43,7 @@
                 </v-btn>
               </v-col>
               <v-col cols=12 md=4>
-                <v-btn @click="restart" block color="white" class="mt-2"><strong>もう1回診断する</strong></v-btn>
+                <v-btn @click="restart" block color="white" class="mt-2"><strong>もう1度探す</strong></v-btn>
               </v-col>
             </v-row>
           </div>

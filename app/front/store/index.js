@@ -2,6 +2,7 @@ export const state = () => ({
   authUser: null,
   userName: null,
   userImage: null,
+  isBeginner: true,
 });
 
 export const mutations = {
@@ -13,5 +14,8 @@ export const mutations = {
   },
   setUserImage(state, userImage) {
     state.userImage = userImage;
+  },
+  setStarted(state, isBeginner) {
+    state.isBeginner = isBeginner;
   },
 };

@@ -7,7 +7,7 @@
       flat
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" ></v-app-bar-nav-icon>
-      <v-toolbar-title>Page title</v-toolbar-title>
+      <v-toolbar-title>Toonder</v-toolbar-title>
     </v-app-bar>
 
     <!--左の三ボタン押したら開くやつ-->
@@ -88,6 +88,7 @@ export default {
       this.$store.commit('setAuthUser', null);
       this.$store.commit('setUserName', null);
       this.$store.commit('setUserImage', null);
+      this.$store.commit('setStarted', true);
       this.$router.push('/login');
       },
       // 画像
