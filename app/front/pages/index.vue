@@ -10,15 +10,19 @@
       >
         <div
           slot-scope="scope"
-          class="pic vertical-gradient"
+          class="pic"
           :style="{
-            'background-image': `data:image/jpg;base64,${scope.data.image}`,
+            'background-image': `url(data:image/jpg;base64,${scope.data.image})`,
           }"
         >
-          <h2 id="tinder-title">{{scope.data.title}}</h2>
-          <h3 id="tinder-year">- {{scope.data.year}}</h3>
-          <br>
-          <h3 id="tinder-genre"># {{scope.data.genre}}</h3>
+          <div class="gradient-black">
+            <br><br><br><br>
+            <h2 id="tinder-title">{{scope.data.title}}</h2>
+            <br>
+            <h3 id="tinder-year">- {{scope.data.year}}</h3>
+            <br>
+            <h3 id="tinder-genre" v-for="item in scope.data.genre" :key="item">#{{item}}</h3>
+          </div>
         </div>
       </VueTinder>
       <div id="buttons">
