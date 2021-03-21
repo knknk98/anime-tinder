@@ -24,6 +24,9 @@
             <h3 id="tinder-genre" v-for="item in scope.data.genre" :key="item">#{{item}}</h3>
           </div>
         </div>
+        <img class="like-pointer" slot="like" src="@/assets/image/LIKE.png">
+        <img class="nope-pointer" slot="nope" src="@/assets/image/NOPE.png">
+        <img class="super-pointer" slot="super" src="@/assets/image/SUPERLIKE.png">
       </VueTinder>
       <div id="buttons">
         <NopeButton @nope="decide('nope')"></NopeButton>

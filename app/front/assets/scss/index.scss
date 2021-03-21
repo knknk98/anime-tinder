@@ -74,3 +74,31 @@
     opacity: 0.9;
     background: linear-gradient(to bottom, transparent, black);
 }
+
+.nope-pointer,
+.like-pointer {
+  position: absolute;
+  z-index: 1;
+  top: 20px;
+  width: 64px;
+  height: 64px;
+}
+
+.nope-pointer {
+  right: 10px;
+}
+
+.like-pointer {
+  left: 10px;
+}
+
+.super-pointer {
+  position: absolute;
+  z-index: 1;
+  bottom: 80px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 112px;
+  height: 78px;
+}
