@@ -43,7 +43,7 @@
                 :key="item.id"
                 cols=5
                 class="d-flex child-flex">
-                <v-img :src="item.image"  @click="openResult(item.id)"></v-img>
+                <v-img :src="'data:image/jpg;base64,'+item.image"  @click="openResult(item.id)"></v-img>
             </v-col>
         </v-row>
     </v-navigation-drawer>
@@ -61,14 +61,7 @@ export default {
           group: null,
           isOpen: false,
           userImage: this.$store.state.userImage,
-          items: [
-            { id: 1, image: "https://animeanime.jp/imgs/p/jtKDOVlKAvjRrNw8SXAVejagI61Nrq_oqaqr/359929.jpg"},
-            { id: 2, image: "https://pbs.twimg.com/media/Epkl6M8VoAAGZAP.jpg"},
-            { id: 3, image: "https://eiga.k-img.com/images/anime/news/112498/photo/a8c42bc0e5f54dc2/320.jpg?1607668254"},
-            { id: 4, image: "https://assets.numan.tokyo/media/articles/images/000/008/367/large/b5b3dba5-f3a8-41af-b775-0bf08c1b7346.jpg?1584837573"},
-            { id: 5, image: "https://dengekionline.com/images/U6Eo/iVNf/gAfD/JWlv/Vkjtk62p9OOmOlk5ovvHfnSD7BsrhFp0IYEPVWKXQjNE4bjLhjQ2ETa8nvAKQkPdow0ld9prCOr91ahW.jpg"},
-            { id: 6, image: "https://media.image.infoseek.co.jp/isnews/photos/eigacom/eigacom_20201222001_0.jpg"}
-          ],
+          items: [],
       }
   },
   // 最近の診断結果を10件まで取得
@@ -101,8 +94,7 @@ export default {
       },
       // 画像
       openResult: function (animeId) {
-        console.log("呼ばれた");
-        this.$router.push({  name: 'result', query: {id: animeId}  });
+        this.$router.push({  path: `/result/${animeId}`  });
       }
   },
 }

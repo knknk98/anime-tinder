@@ -4,7 +4,7 @@
       <v-row>
         <v-col cols=12 md=3>
           <v-img
-            :src="anime.image"
+            :src="'data:image/jpg;base64,'+anime.image"
             aspect-ratio=0.75
             max-height=400
             max-width=300
