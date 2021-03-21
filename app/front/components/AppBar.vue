@@ -66,11 +66,9 @@ export default {
   },
   // 最近の診断結果を10件まで取得
   async mounted() {
-    await axios.get(this.$config.serverURL+'/user/recent', {
-      params: {
-        "num" : 10,
-        "sessionID": this.$store.state.authUser,
-      }
+    await axios.post(this.$config.serverURL+'/user/recent', {
+        num : 10,
+        sessionID: this.$store.state.authUser,
     }).then(res => {
       this.items = this.items.concat(res.data.animes);
     }).catch(err => {
