@@ -9,7 +9,7 @@ from urllib.parse import parse_qsl
 from flask_cors import CORS
 from src.settings import ENV_VALUES
 from src.utils import img_encode
-from sqlalchemy import desc, asc
+from sqlalchemy import desc, asc, distinct
 import numpy as np
 from typing import List
 
@@ -160,8 +160,9 @@ def create_app():
                         order_by(desc(Recommended.updated_at)).\
                         limit(int(image_num)).all()
             if past_data is None:
-                response_data = {'animeImages': []}
+                response_data = {'animes': []}
             else:
+                # print([data[1].anime_id for data in past_data])
                 # 各データのimageプロパティから画像をbase64でエンコードしたものを辞書にして返す.
                 response_data = {
                                     'animes': [
@@ -400,8 +401,31 @@ def create_app():
                     }
                     return jsonify(response_data)
                 except Exception as e:
+                    # 例外を受け取ったらRecommendedの直近を返すことにする.
                     print(e)
-                    response_data = {"animes": []}
+                    anime = db.session.query(Recommended, AnimeData).\
+                                join(Recommended, AnimeData.anime_id == Recommended.anime_id).\
+                                filter(Recommended.user_id == user.user_id).\
+                                order_by(desc(Recommended.updated_at)).\
+                                first()[1]
+                    if anime is None:
+                        response_data = {"animes": []}
+                    else:
+                        response_data = {
+                            "animes":
+                            [
+                                {
+                                    "id": anime.anime_id,
+                                    "title": anime.title,
+                                    "image": img_encode(anime.image),
+                                    "description": anime.description,
+                                    "year": anime.year,
+                                    "genre": anime.genre.split(),
+                                    "company": anime.company,
+                                }
+                            ]
+                        }
+
                     return jsonify(response_data)
             else:
                 return redirect(ENV_VALUES['APP_URL'])
