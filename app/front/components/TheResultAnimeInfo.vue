@@ -33,7 +33,9 @@
           <div>
             <v-row>
               <v-col cols=12 md=8>
-                <h4>{{anime.genre}}</h4>
+                <div>
+                  <span id="genres" v-for="item in anime.genre" :key="item">#{{item}}</span>
+                </div>
                 <v-btn :href="'https://anime.dmkt-sp.jp/animestore/sch_pc?searchKey='+anime.title+'=svod_tvod'" target="_blank" rel="noopener noreferrer" style="text-transform: none" color="#EB5528" dark x-small>
                   <strong>dアニメストア</strong></v-btn>
                 <v-btn :href="'https://www.amazon.co.jp/s?k='+anime.title+'&i=instant-video'" target="_blank" rel="noopener noreferrer" style="text-transform: none" color="#01A7E1" dark x-small>
