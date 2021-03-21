@@ -16,9 +16,16 @@
   {
     "name": "result",
     "path": "/result",
-    "component": "/home/app/front/pages/result.vue",
-    "chunkName": "pages/result",
-    "_name": "_498deb4b"
+    "component": "/home/app/front/pages/result/index.vue",
+    "chunkName": "pages/result/index",
+    "_name": "_17718d8e"
+  },
+  {
+    "name": "result-id",
+    "path": "/result/:id",
+    "component": "/home/app/front/pages/result/_id.vue",
+    "chunkName": "pages/result/_id",
+    "_name": "_41819b76"
   },
   {
     "name": "index",
