@@ -7,7 +7,7 @@
       flat
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" ></v-app-bar-nav-icon>
-      <v-toolbar-title>Page title</v-toolbar-title>
+      <v-toolbar-title>Toonder</v-toolbar-title>
     </v-app-bar>
 
     <!--左の三ボタン押したら開くやつ-->
