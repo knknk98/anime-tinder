@@ -122,7 +122,7 @@ export default {
         animes: this.animesorted, 
         sessionID: this.$store.state.authUser,
       }).then(res => {
-        this.$router.push({  name: 'result', query: {id: res.data.animes[0].id}  });
+        this.$router.push({  path: `/result/${res.data.animes[0].id}`  });
       }).catch(err => {
       });
     },

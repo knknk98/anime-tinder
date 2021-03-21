@@ -40,11 +40,10 @@
         <v-row justify="center">
             <v-col
                 v-for="item in items"
-                :key="item.title"
-                :href="item.to"
+                :key="item.id"
                 cols=5
                 class="d-flex child-flex">
-                <v-img :src="item.imageUrl" ></v-img>
+                <v-img :src="'data:image/jpg;base64,'+item.image"  @click="openResult(item.id)"></v-img>
             </v-col>
         </v-row>
     </v-navigation-drawer>
@@ -54,54 +53,49 @@
 
 
 <script>
-  export default {
-    data() {
-        return {
-            drawer: false,
-            group: null,
-            isOpen: false,
-            userImage: this.$store.state.userImage,
-            items: [
-                { title: '五等分の花嫁', imageUrl: "https://animeanime.jp/imgs/p/jtKDOVlKAvjRrNw8SXAVejagI61Nrq_oqaqr/359929.jpg", to: "/result/gotoubun" },
-                { title: '呪術廻戦', imageUrl: "https://pbs.twimg.com/media/Epkl6M8VoAAGZAP.jpg", to: "/result/jyujyutsu" },
-                { title: 'リゼロ', imageUrl: "https://eiga.k-img.com/images/anime/news/112498/photo/a8c42bc0e5f54dc2/320.jpg?1607668254", to: "/result/rezero" },
-                { title: 'はたらく細胞', imageUrl: "https://assets.numan.tokyo/media/articles/images/000/008/367/large/b5b3dba5-f3a8-41af-b775-0bf08c1b7346.jpg?1584837573", to: "/result/hataraku" },
-                { title: 'ゆるキャン△', imageUrl: "https://dengekionline.com/images/U6Eo/iVNf/gAfD/JWlv/Vkjtk62p9OOmOlk5ovvHfnSD7BsrhFp0IYEPVWKXQjNE4bjLhjQ2ETa8nvAKQkPdow0ld9prCOr91ahW.jpg", to: "/result/yurukyan" },
-                { title: 'PUIPUIモルカー', imageUrl: "https://media.image.infoseek.co.jp/isnews/photos/eigacom/eigacom_20201222001_0.jpg", to: "result/molcar"}
-            ],
-        }
+import axios from 'axios';
+export default {
+  data() {
+      return {
+          drawer: false,
+          group: null,
+          isOpen: false,
+          userImage: this.$store.state.userImage,
+          items: [],
+      }
+  },
+  // 最近の診断結果を10件まで取得
+  async mounted() {
+    await axios.get(this.$config.serverURL+'/user/recent', {
+      params: {
+        "num" : 10,
+        "sessionID": this.$store.state.authUser,
+      }
+    }).then(res => {
+      this.items = this.items.concat(res.data.animes);
+    }).catch(err => {
+    });
+  },
+  watch: {
+    group () {
+      this.drawer = false
     },
-
-    watch: {
-      group () {
-        this.drawer = false
+  },
+  methods: {
+      open: function () {
+      this.isOpen = !this.isOpen;
       },
-    },
-    methods: {
-        open: function () {
-        this.isOpen = !this.isOpen;
-        },
-        logout: function () {
-        // var auth = this.$store.state.authUser;
-        // // logoutされてからリダイレクト
-        // await axios.get(this.$config.serverURL + '/user/logout', {
-        //   params: auth,
-        // }).then(res => {
-        //   // logout
-        //   this.$store.commit('setAuthUser', null);
-        //   this.$store.commit('setUserName', null);
-        //   this.$store.commit('setUserImage', null);
-        //   this.$router.push('/login');
-        // }).catch(err => {
-        //   // error
-        // });
-
-        // サーバからのリダイレクトがうまくいかない。一旦簡易的にログアウト
-        this.$store.commit('setAuthUser', null);
-        this.$store.commit('setUserName', null);
-        this.$store.commit('setUserImage', null);
-        this.$router.push('/login');
-        },
-    },
-  }
+      logout: function () {
+      // サーバからのリダイレクトがうまくいかない。簡易的にログアウト
+      this.$store.commit('setAuthUser', null);
+      this.$store.commit('setUserName', null);
+      this.$store.commit('setUserImage', null);
+      this.$router.push('/login');
+      },
+      // 画像
+      openResult: function (animeId) {
+        this.$router.push({  path: `/result/${animeId}`  });
+      }
+  },
+}
 </script>
