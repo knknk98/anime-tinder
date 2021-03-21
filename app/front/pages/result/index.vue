@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Loading v-show="loading"></Loading>
-    <div class="home-background mt-5" v-show="!loading">
-    <!--div class="home-background mt-5"-->
+    <!--Loading v-show="loading"></Loading>
+    <div class="home-background mt-5" v-show="!loading"-->
+    <div class="home-background mt-5">
       <TheResultTextBox :title="animeInfo.title"/>
       <TheResultAnimeInfo :anime="animeInfo"/>
       <CaptionBox title="結果をシェアする" />
@@ -19,7 +19,7 @@ import TheResultAnimeInfo from '~/components/TheResultAnimeInfo.vue'
 import SNSShareButton from '~/components/SNSShareButton.vue'
 
 export default {
-  middleware: 'authenticated',
+  //middleware: 'authenticated',
   components: {
     Loading,
     TheResultTextBox,

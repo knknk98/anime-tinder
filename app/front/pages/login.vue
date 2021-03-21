@@ -26,7 +26,7 @@ export default {
     return {
       name: 'login',
       image_srcs: [
-          require("@/assets/image/logo.PNG"),
+          require("@/assets/image/logo.png"),
       ]
     }
   },

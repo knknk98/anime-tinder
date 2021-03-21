@@ -66,9 +66,9 @@
     data: () => ({
       rules: [v => !!v || '',
               v => (!!v && v.length <= 140) || `Max 140 characters`],
-      text: "ここにツイート文を表示",
-      hashtag: "aaa,bbb",
-      value: "ここにツイート文を表示 #aaa #bbb",
+      text: "あなたにオススメのアニメは「」です！\n\n----オタクとアニメのマッチングサービスToonder",
+      hashtag: "Toonder,技育CAMP,ハッカソン",
+      value: "あなたにオススメのアニメは「」です！\n\n----オタクとアニメのマッチングサービスToonder \n#Toonder #技育CAMP #ハッカソン",
     }),
 
     methods: {
