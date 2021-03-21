@@ -48,7 +48,7 @@
         label="コピペ用"
         auto-grow
         :rules="rules"
-        :value="value"
+        :value="value1+title+value2"
         counter
         background-color="white"
         clearable
@@ -66,9 +66,11 @@
     data: () => ({
       rules: [v => !!v || '',
               v => (!!v && v.length <= 140) || `Max 140 characters`],
-      text: "あなたにオススメのアニメは「」です！\n\n----オタクとアニメのマッチングサービスToonder",
+      text1: "あなたにオススメのアニメは",
+      text2: "です！\n\n----オタクとアニメのマッチングサービスToonder",
       hashtag: "Toonder,技育CAMP,ハッカソン",
-      value: "あなたにオススメのアニメは「」です！\n\n----オタクとアニメのマッチングサービスToonder \n#Toonder #技育CAMP #ハッカソン",
+      value1: "あなたにオススメのアニメは",
+      value2: "です！\n\n----オタクとアニメのマッチングサービスToonder \n#Toonder #技育CAMP #ハッカソン",
     }),
 
     methods: {
@@ -77,16 +79,19 @@
         let href = ""
         switch( sns ) {
           case 'twitter':
-              href = `https://twitter.com/intent/tweet?url=${shareUrl}&hashtags=`+this.hashtag+`&text=`+this.text
+              // href = `https://twitter.com/intent/tweet?url=${shareUrl}&hashtags=`+this.hashtag+`&text=`+this.text
+              href = `https://twitter.com/intent/tweet?hashtags=`+this.hashtag+`&text=`+this.text1+this.title+this.text2
               break
           case 'facebook':
-              href = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`
+              // href = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`
+              href = `https://www.facebook.com/sharer/sharer.php`
               break
           case 'line':
-              href = `https://line.me/R/msg/text/?`+this.text
+              href = `https://line.me/R/msg/text/?`+this.text1+this.title+this.text2
               break
           case 'hatena':
-              href = `http://b.hatena.ne.jp/add?&url=${shareUrl}`
+              // href = `http://b.hatena.ne.jp/add?&url=${shareUrl}`
+              href = `http://b.hatena.ne.jp/add`
               break
         }
         if(sns=="line"){
