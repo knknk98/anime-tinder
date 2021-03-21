@@ -7,7 +7,7 @@
       flat
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" ></v-app-bar-nav-icon>
-      <v-toolbar-title>Toonder</v-toolbar-title>
+      <v-toolbar-title>Page title</v-toolbar-title>
     </v-app-bar>
 
     <!--左の三ボタン押したら開くやつ-->
@@ -66,11 +66,9 @@ export default {
   },
   // 最近の診断結果を10件まで取得
   async mounted() {
-    await axios.get(this.$config.serverURL+'/user/recent', {
-      params: {
-        "num" : 10,
-        "sessionID": this.$store.state.authUser,
-      }
+    await axios.post(this.$config.serverURL+'/user/recent', {
+        num : 10,
+        sessionID: this.$store.state.authUser,
     }).then(res => {
       this.items = this.items.concat(res.data.animes);
     }).catch(err => {
@@ -90,6 +88,7 @@ export default {
       this.$store.commit('setAuthUser', null);
       this.$store.commit('setUserName', null);
       this.$store.commit('setUserImage', null);
+      this.$store.commit('setStarted', true);
       this.$router.push('/login');
       },
       // 画像
