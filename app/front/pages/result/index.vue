@@ -34,11 +34,9 @@ export default {
   },
   async mounted() {
     var animeId = this.$route.query.id;
-    await axios.get(this.$config.serverURL+'/app/fetch', {
-      params: {
-        "animeId": animeId,
-        "sessionID": this.$store.state.authUser,
-      },
+    await axios.post(this.$config.serverURL+'/app/fetch', {
+      animeId: animeId,
+      sessionID: this.$store.state.authUser,
     }).then(res => {
       this.animeInfo = res.data.animes[0];
       this.loading = false;
