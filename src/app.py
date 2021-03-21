@@ -143,39 +143,37 @@ def create_app():
     # recommendされた最近のアニメを取得する
     # [GET] : "num": intに変換可能なstring, "sessionID": セッションID
     # {'animes': [ {"image": base64(string), "id": int}]} が返る
-    @app.route("/user/recent", methods=["GET"])
+    @app.route("/user/recent", methods=["POST"])
     def fetch_recent_user_data():
-        image_num = request.args.get("num")
-        session_id = request.args.get("sessionID")
-        user = User.query.filter(User.session_id == session_id).first()
-        # テスト用に定数設定してセッション関係なくするときのやつ
-        # image_num = '5'
-        # user = User.query.filter(User.name == "Kw_I_KU").first()
-        if user is not None:
-            # recommendedの日付データを見て新しい順に持ってくれば良い.
-            # recommendedとAnimeDataをanime_idでjoinして, user_idを指定して時刻順にとってきて数の上限を設定する.
-            past_data = db.session.query(Recommended, AnimeData).\
-                        join(Recommended, AnimeData.anime_id == Recommended.anime_id).\
-                        filter(Recommended.user_id == user.user_id).\
-                        order_by(desc(Recommended.updated_at)).\
-                        limit(int(image_num)).all()
-            if past_data is None:
-                response_data = {'animes': []}
+        if request.method == "POST":
+            image_num = request.json['num']
+            session_id = request.json['sessionID']
+            user = User.query.filter(User.session_id == session_id).first()
+            if user is not None:
+                # recommendedの日付データを見て新しい順に持ってくれば良い.
+                # recommendedとAnimeDataをanime_idでjoinして, user_idを指定して時刻順にとってきて数の上限を設定する.
+                past_data = db.session.query(Recommended, AnimeData).\
+                            join(Recommended, AnimeData.anime_id == Recommended.anime_id).\
+                            filter(Recommended.user_id == user.user_id).\
+                            order_by(desc(Recommended.updated_at)).\
+                            limit(int(image_num)).all()
+                if past_data is None:
+                    response_data = {'animes': []}
+                else:
+                    # print([data[1].anime_id for data in past_data])
+                    # 各データのimageプロパティから画像をbase64でエンコードしたものを辞書にして返す.
+                    response_data = {
+                                        'animes': [
+                                            {
+                                                "image": img_encode(data[1].image),
+                                                "id": data[0].anime_id,
+                                            }
+                                            for data in past_data
+                                        ]
+                                    }
+                return jsonify(response_data)
             else:
-                # print([data[1].anime_id for data in past_data])
-                # 各データのimageプロパティから画像をbase64でエンコードしたものを辞書にして返す.
-                response_data = {
-                                    'animes': [
-                                        {
-                                            "image": img_encode(data[1].image),
-                                            "id": data[0].anime_id,
-                                        }
-                                        for data in past_data
-                                    ]
-                                }
-            return jsonify(response_data)
-        else:
-            return redirect(ENV_VALUES['APP_URL'])
+                return redirect(ENV_VALUES['APP_URL'])
 
     # 指定した数(num)だけカードに表示するアニメの情報を取ってくる。DBにアクセスし、過去に表示したカード以外から適当に選んでくる。
     # [POST] : {"num": intに変換可能なstring, "sessionID": string, "animeId": [int, ...]}
@@ -436,34 +434,35 @@ def create_app():
                 return redirect(ENV_VALUES['APP_URL'])
         pass
 
-    @app.route('/app/fetch', methods=['GET'])
+    @app.route('/app/fetch', methods=['POST'])
     def fetch_anime_data():
-        anime_id = request.args.get("animeId")
-        session_id = request.args.get("sessionID")
-        user = User.query.filter(User.session_id == session_id).first()
-        if user is not None:
-            anime = db.session.query(AnimeData).\
-                        filter(AnimeData.anime_id == anime_id).first()
-            if anime is None:
-                response_data = {'animes': []}
+        if request.method == "POST":
+            anime_id = request.json['animeId']
+            session_id = request.json['sessionID']
+            user = User.query.filter(User.session_id == session_id).first()
+            if user is not None:
+                anime = db.session.query(AnimeData).\
+                            filter(AnimeData.anime_id == anime_id).first()
+                if anime is None:
+                    response_data = {'animes': []}
+                else:
+                    response_data = {
+                        "animes":
+                        [
+                            {
+                                "id": anime.anime_id,
+                                "title": anime.title,
+                                "image": img_encode(anime.image),
+                                "description": anime.description,
+                                "year": anime.year,
+                                "genre": anime.genre.split(),
+                                "company": anime.company,
+                            }
+                        ]
+                    }
+                return jsonify(response_data)
             else:
-                response_data = {
-                    "animes":
-                    [
-                        {
-                            "id": anime.anime_id,
-                            "title": anime.title,
-                            "image": img_encode(anime.image),
-                            "description": anime.description,
-                            "year": anime.year,
-                            "genre": anime.genre.split(),
-                            "company": anime.company,
-                        }
-                    ]
-                }
-            return jsonify(response_data)
-        else:
-            return redirect(ENV_VALUES['APP_URL'])
+                return redirect(ENV_VALUES['APP_URL'])
 
     return app
 
