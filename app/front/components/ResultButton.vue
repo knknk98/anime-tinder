@@ -14,7 +14,7 @@
         </v-icon>
       </v-btn>
     </template>
-    <span>診断結果を見る</span>
+    <span>結果を見る</span>
   </v-tooltip>
 </template>
 <script>

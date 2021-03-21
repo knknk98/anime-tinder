@@ -124,7 +124,7 @@ export default {
       // 仕分けされたアニメ
       animesorted: [],
       loading: false,
-      dialog: this.$store.state.accessed,
+      dialog: this.$store.state.isBeginner,
     }
   },
   head() {
@@ -134,8 +134,8 @@ export default {
   },
   // 最初5件を取得
   mounted () {
+    this.dialog = this.$store.state.isBeginner;
     this.getData();
-    this.$store.commit('setAccessed', false);
   },
   methods: {
     // 0:NOPE,1:LIKE,2:SUPERLIKE

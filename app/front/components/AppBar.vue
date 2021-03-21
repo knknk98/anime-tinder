@@ -88,6 +88,7 @@ export default {
       this.$store.commit('setAuthUser', null);
       this.$store.commit('setUserName', null);
       this.$store.commit('setUserImage', null);
+      this.$store.commit('setStarted', true);
       this.$router.push('/login');
       },
       // 画像
