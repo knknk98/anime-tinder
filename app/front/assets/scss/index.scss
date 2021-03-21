@@ -33,6 +33,7 @@
 }
 
 .pic {
+    position: absolute;
     width: 100%;
     height: 100%;
     background-size: cover;
@@ -45,7 +46,6 @@
     font-size: 36px;
     left: 5%;
     right: 0;
-    top: 80%;
 }
 
 #tinder-year{
@@ -55,7 +55,6 @@
     font-size: 24px;
     left: 5%;
     right: 0;
-    top: 80%;
 }
 
 #tinder-genre{
@@ -65,9 +64,41 @@
     font-size: 24px;
     left: 5%;
     right: 0;
-    top: 80%;
 }
 
-.vertical-gradient {
+.gradient-black {
+    position:absolute;
+	bottom: 0;
+    left: 0;
+    right: 0;
     opacity: 0.9;
+    background: linear-gradient(to bottom, transparent, black);
+}
+
+.nope-pointer,
+.like-pointer {
+  position: absolute;
+  z-index: 1;
+  top: 20px;
+  width: 64px;
+  height: 64px;
+}
+
+.nope-pointer {
+  right: 10px;
+}
+
+.like-pointer {
+  left: 10px;
+}
+
+.super-pointer {
+  position: absolute;
+  z-index: 1;
+  bottom: 80px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 112px;
+  height: 78px;
 }

@@ -67,16 +67,23 @@
       >
         <div
           slot-scope="scope"
-          class="pic vertical-gradient"
+          class="pic"
           :style="{
-            'background-image': `url(${scope.data.image})`,
+            'background-image': `url(data:image/jpg;base64,${scope.data.image})`,
           }"
         >
-          <h2 id="tinder-title">{{scope.data.title}}</h2>
-          <h3 id="tinder-year">- {{scope.data.year}}</h3>
-          <br>
-          <h3 id="tinder-genre"># {{scope.data.genre}}</h3>
+          <div class="gradient-black">
+            <br><br><br><br>
+            <h2 id="tinder-title">{{scope.data.title}}</h2>
+            <br>
+            <h3 id="tinder-year">- {{scope.data.year}}</h3>
+            <br>
+            <h3 id="tinder-genre" v-for="item in scope.data.genre" :key="item">#{{item}}</h3>
+          </div>
         </div>
+        <img class="like-pointer" slot="like" src="@/assets/image/LIKE.png">
+        <img class="nope-pointer" slot="nope" src="@/assets/image/NOPE.png">
+        <img class="super-pointer" slot="super" src="@/assets/image/SUPERLIKE.png">
       </VueTinder>
       <div id="buttons">
         <NopeButton @nope="decide('nope')"></NopeButton>
@@ -98,7 +105,7 @@ import ResultButton from '@/components/ResultButton';
 import VueTinder from 'vue-tinder';
 
 export default {
-  //middleware: 'authenticated',
+  middleware: 'authenticated',
   components: {
     Loading,
     NopeButton,
@@ -181,9 +188,7 @@ export default {
         animes: this.animesorted, 
         sessionID: this.$store.state.authUser,
       }).then(res => {
-        this.loading = false;
-        console.log(res.data);
-        // this.$router.replace({ name: 'result' , key: res.data.id});
+        this.$router.push({  path: `/result/${res.data.animes[0].id}`  });
       }).catch(err => {
       });
     },
