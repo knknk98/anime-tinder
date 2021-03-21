@@ -28,6 +28,7 @@ def arrange_csv():
                 description = row[3]
                 if description == "description":
                     url = "https://ja.wikipedia.org/wiki/" + urlencode(title)
+                    
 
 
 if __name__ == "__main__":
