@@ -32,7 +32,7 @@ TinderライクなUIで機械学習を用いたアニメのマッチングアプ
     <th>担当</th>
     <td>フロントエンド：<a href="https://github.com/knknk98">@knknk98</a>
       <a href="https://github.com/koukiNAGATA">@koukiNAGATA</a><br>
-      バックエンド（API作成）：<a href="https://github.com/littleIkawa">@litteleIkawa</a><br>
+      バックエンド（APIサーバ）：<a href="https://github.com/littleIkawa">@litteleIkawa</a><br>
       バックエンド（レコメンドアルゴリズム）：<a href="https://github.com/hoppiece">@hoppiece</a>
     </td>
   </tr>
