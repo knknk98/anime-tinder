@@ -33,10 +33,9 @@ TinderライクなUIで機械学習を用いたアニメのマッチングアプ
   </tr>
   <tr>
     <th>使用技術</th>
-    <td><img src="https://user-images.githubusercontent.com/65712721/112448368-ab637e80-8d95-11eb-8384-ba0bba04b22e.png" width="70%"></td>
+    <td><img src="https://user-images.githubusercontent.com/65712721/112453423-0481e100-8d9b-11eb-830a-b394215beddf.png" width="70%"></td>
   </tr>
 </table>
-
 
 ## 構成
 - Docker ... バージョン管理
