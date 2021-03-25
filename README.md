@@ -47,10 +47,8 @@ TinderライクなUIで機械学習を用いたアニメのマッチングアプ
 </table>
 
 ### 使用方法
-1. Dockerコンテナ立ち上げ
-
+1. Dockerコンテナ立ち上げ  
 docker-compose.ymlがあるパスで`$ docker-compose up`
 
-2. ブラウザでアクセス
-
+2. ブラウザでアクセス  
 `http://localhost:3000`
