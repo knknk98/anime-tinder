@@ -76,25 +76,19 @@ paths:
                   profile_image_url:
                     type: "string"
   /user/recent:
-    get:
+    post:
       tags:
         - user
       summary: 最近の診断結果取得
       description:
         指定した数(num)だけその人の最近の診断結果(アニメ画像)を取ってくる
-      parameters:
-        - name: num
-          in: query
-          description: 表示数
-          required: true
-          schema:
-            type: integer
-        - name: sessionID
-          in: header
-          description: セッションID
-          required: true
-          schema:
-            type: string
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecentRequest'
+        required: true
       responses:
         200:
           description: A successful response.
@@ -104,7 +98,7 @@ paths:
                 $ref: "#/components/schemas/RecentResults"
 
   /app/recs:
-    get:
+    post:
       tags:
         - app
       summary: アニメ情報取得API
@@ -112,19 +106,6 @@ paths:
         指定した数(num)だけカードに表示するアニメの情報を取ってくる。<br>
         DBにアクセスし、過去に表示したカード以外から適当に選んでくる。
 
-      parameters:
-        - name: num
-          in: query
-          description: 表示数
-          required: true
-          schema:
-            type: integer
-        - name: sessionID
-          in: header
-          description: セッションID
-          required: true
-          schema:
-            type: string
       responses:
         200:
           description: A successful response.
@@ -140,13 +121,6 @@ paths:
       description:
         LIKE/NOPE/SUPERLIKEの情報を渡すとオススメアニメの情報が返ってくる。<br>
         DBにアクセスし、過去のLIKE/NOPE/SUPERLIKE情報と今回の情報をもとにオススメアニメを1つ返す。
-      parameters:
-        - name: sessionID
-          in: header
-          description: セッションID
-          required: true
-          schema:
-            type: string
       requestBody:
         description: Request Body
         content:
@@ -161,9 +135,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AnimeGetResponse"
+                
+  /app/fetch:
+    post:
+      tags:
+        - app
+      summary: アニメ取得API
+      description:
+        アニメIDを渡すと、そのIDのアニメ情報が返ってくる。
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FetchRequest'
+        required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnimeGetResponse"
 
 components:
   schemas:
+    RecentRequest:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        num:
+          type: integer
     RecentResults:
       type: object
       properties:
@@ -175,6 +178,10 @@ components:
     AnimeGetResponse:
       type: object
       properties:
+        sessionId:
+          type: string
+        num:
+          type: integer
         animes:
           type: array
           items:
@@ -183,6 +190,8 @@ components:
     AnimeLikeRequest:
       type: object
       properties:
+        sessionId:
+          type: string
         animes:
           type: array
           items:
@@ -223,4 +232,10 @@ components:
         like:
           type: integer
           description: 0:NOPE,1:LIKE,2:SUPERLIKE
-
+    FetchRequest:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        animeId:
+          type: string
