@@ -25,7 +25,7 @@ TinderライクなUIで機械学習を用いたアニメのマッチングアプ
   </tr>
   <tr>
     <th>担当</th><td>フロントエンド：@knknk98 @koukiNAGATA<br>
-    バックエンド（API作成）：@litteleIkawa、
+    バックエンド（APIサーバ）：@litteleIkawa、
     バックエンド（レコメンドアルゴリズム）：@hoppiece</td>
   </tr>
   <tr>
