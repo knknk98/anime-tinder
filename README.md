@@ -29,7 +29,6 @@ TinderライクなUIで機械学習を用いたアニメのマッチングアプ
     </td>
   </tr>
   <tr>
-
     <th>担当</th>
     <td>フロントエンド：<a href="https://github.com/knknk98">@knknk98</a>
       <a href="https://github.com/koukiNAGATA">@koukiNAGATA</a><br>
@@ -46,7 +45,7 @@ TinderライクなUIで機械学習を用いたアニメのマッチングアプ
     <td><img src="https://user-images.githubusercontent.com/65712721/112453423-0481e100-8d9b-11eb-830a-b394215beddf.png" width="70%"></td>
   </tr>
 </table>
-            
+
 ### 使用方法
 1. Dockerコンテナ立ち上げ
 
