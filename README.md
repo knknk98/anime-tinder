@@ -29,6 +29,7 @@ TinderライクなUIで機械学習を用いたアニメのマッチングアプ
     </td>
   </tr>
   <tr>
+
     <th>担当</th>
     <td>フロントエンド：<a href="https://github.com/knknk98">@knknk98</a>
       <a href="https://github.com/koukiNAGATA">@koukiNAGATA</a><br>
